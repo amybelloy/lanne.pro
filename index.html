@@ -142,6 +142,10 @@
       opacity: 1;
     }
 
+    .mobile-menu-toggle {
+      display: none;
+    }
+
     .icon-link svg {
       width: 18px;
       height: 18px;
@@ -627,13 +631,26 @@
     .model-card {
       border-radius: 4px;
       overflow: hidden;
-      transition: .18s ease;
+      transition: all .45s cubic-bezier(0.23, 1, 0.32, 1);
       cursor: pointer;
+      opacity: 0;
+      transform: translateY(30px);
     }
 
-    .category-card:hover,
+    .category-card.visible,
+    .model-card.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .category-card:hover {
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, .3);
+    }
+
     .model-card:hover {
-      transform: translateY(-2px)
+      transform: translateY(-8px) scale(1.01);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, .15);
     }
 
     .category-card {
@@ -989,6 +1006,7 @@
     }
 
     @media (max-width: 980px) {
+
       .section-grid,
       .deliver-grid,
       .page-hero-grid,
@@ -1017,30 +1035,81 @@
       }
 
       .header-inner {
-        display: flex !important;
-        flex-direction: column !important;
-        align-items: center !important;
-        gap: 12px !important;
-        padding: 16px 0 !important;
+        display: grid !important;
+        grid-template-columns: 1fr auto auto;
+        align-items: center;
+        gap: 12px;
+        padding: 0 16px !important;
+        min-height: 60px;
       }
 
-      .logo {
-        font-size: 1.5rem;
-        margin-bottom: 4px;
+      .mobile-menu-toggle {
+        display: block !important;
+        background: none;
+        border: none;
+        color: #fff;
+        padding: 10px;
+        cursor: pointer;
+        z-index: 1000;
+        order: 3;
+      }
+
+      .mobile-menu-toggle svg {
+        width: 28px;
+        height: 28px;
       }
 
       .main-nav {
-        gap: 14px;
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
         width: 100%;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.98);
+        flex-direction: column;
         justify-content: center;
-        flex-wrap: wrap;
+        align-items: center;
+        gap: 32px;
+        padding: 40px;
+        z-index: 999;
+        font-size: 1.4rem;
+      }
+
+      .main-nav.open {
+        display: flex;
+        animation: menuFadeIn .3s cubic-bezier(0.4, 0, 0.2, 1) forwards;
       }
 
       .header-icons {
+        order: 2;
+        margin-top: 0;
+        width: auto;
+      }
+
+      @keyframes menuFadeIn {
+        from { opacity: 0; transform: scale(1.05); }
+        to { opacity: 1; transform: scale(1); }
+      }
+
+      .hero h1 {
+        font-size: clamp(2.8rem, 12vw, 5rem);
+        text-align: center;
+      }
+
+      .hero-copy {
+        margin-left: 0;
+        text-align: center;
         width: 100%;
+      }
+
+      .hero-inner {
         justify-content: center;
-        padding-right: 0;
-        margin-top: 4px;
+        padding: 60px 0;
+      }
+
+      .cards-grid {
+        gap: 30px;
       }
     }
 
@@ -1066,7 +1135,14 @@
   <header class="site-header">
     <div class="container header-inner">
       <a href="#" class="logo" data-route="home">Lanne.pro</a>
-      <nav class="main-nav">
+      <button class="mobile-menu-toggle" id="menuToggle" aria-label="Menu">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <nav class="main-nav" id="mainNav">
         <a href="#inicio" class="nav-link" data-route="home">Início</a>
         <div class="dropdown" id="categoryDropdown" style="display: inline-block;">
           <button class="drop-trigger" type="button">Serviços</button>
@@ -1394,7 +1470,7 @@
           image: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/647060831_1532464545261305_6240195086791209154_n.png?stp=dst-png_s843x403&_nc_cat=104&ccb=1-7&_nc_sid=0024fc&_nc_ohc=ntZ-4l5CqNcQ7kNvwFKCmyG&_nc_oc=AdrpIVimB4UNevrVbSYC-4U6174DiiSy7lnNB7vu3FtTUjq9PAt89ocKeJy_QaNrKVlTfwFqoiJZMoO_9X3-LukQ&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEV9qbtlTScISJNXok61_aQ294bTa09aljYPTt0TOqTbQ&oe=69F46585',
           description: 'Modelos sensíveis, acolhedores e profissionais para destacar sua atuação com elegância.',
           models: [
-            { id: 'psicologia-serenidade', name: 'Neuropsy Saúde | Clinica Neuropsicológica', short: 'Visual leve e acolhedor para psicólogas.', long: 'Um site elegante e acolhedor, perfeito para psicólogas que desejam transmitir tranquilidade e profissionalismo. Inclui seção de apresentação profissional, especialidades, depoimentos de pacientes e formulário de contato.', siteUrl: 'https://neuropsysaudecaruaru.com.br', previewImage: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/647060831_1532464545261305_6240195086791209154_n.png?stp=dst-png_s843x403&_nc_cat=104&ccb=1-7&_nc_sid=0024fc&_nc_ohc=ntZ-4l5CqNcQ7kNvwFKCmyG&_nc_oc=AdrpIVimB4UNevrVbSYC-4U6174DiiSy7lnNB7vu3FtTUjq9PAt89ocKeJy_QaNrKVlTfwFqoiJZMoO_9X3-LukQ&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEV9qbtlTScISJNXok61_aQ294bTa09aljYPTt0TOqTbQ&oe=69F46585', galleryImages: ['https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/658897639_2124390881659457_7147809031739594221_n.png?stp=dst-png_s843x403&_nc_cat=111&ccb=1-7&_nc_sid=0024fc&_nc_ohc=54FYXl2hp9QQ7kNvwEluT0H&_nc_oc=Adpa6Y54WVTQOaTzkIWluRGgl11iQaUpN7jLKSkYZGpF5e3CHz-iWvkq9r9sq5jm0-4JqM-McpeWgD5ruH4sYza4&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AFvXEgFI1VDazk3PbEHU1rMiJ-Gda04_Gtfe7I_gdcSzQ&oe=69F46764', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/656924080_4180196558906209_4441174656164308419_n.png?stp=dst-png_s526x395&_nc_cat=109&ccb=1-7&_nc_sid=0024fc&_nc_ohc=lSzE7Ny7FesQ7kNvwEHFRtc&_nc_oc=AdoC_5KC4q0BcFiytsEeujzOmkwaYGObAVbj7evOqHSjDCKVj5SnJg_RiIAGGva4cHJSBG8cdlcnXCn9xq6WAqca&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AE6tW75R6juOzUz1gtuT_FmZnKsTiadT2pKIN8tGbhe_A&oe=69F464CA', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/598061198_1480344283724462_897387539385843564_n.png?stp=dst-png_s480x480&_nc_cat=105&ccb=1-7&_nc_sid=0024fc&_nc_ohc=SnmsyQ5Y_nIQ7kNvwE83MT9&_nc_oc=AdqCRIqoLArAbSAght5sTtIAb2NWsjAzGVFHsfHzJDkDMmLqby27pI0QQAs6-DIIIwRTGKdpBmYXaRe0j1OBiEAM&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AFIz3wkBJ_LGDXFLKbkTofk373AvRetbowqRj_iVURrmg&oe=69F46A68'], slides: ['Início Neuropsy', 'Avaliação Neuropsicológica', 'Nossos Serviços'] },
+            { id: 'psicologia-serenidade', name: 'Neuropsy Saúde | Clinica Neuropsicológica', short: 'Visual leve e acolhedor para psicólogas.', long: 'Um site elegante e acolhedor, perfeito para psicólogas que desejam transmitir tranquilidade e profissionalismo. Inclui seção de apresentação profissional, especialidades, depoimentos de pacientes e formulário de contato.', siteUrl: 'https://amybelloy.github.io/neuropsy-saude/ ', previewImage: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/647060831_1532464545261305_6240195086791209154_n.png?stp=dst-png_s843x403&_nc_cat=104&ccb=1-7&_nc_sid=0024fc&_nc_ohc=ntZ-4l5CqNcQ7kNvwFKCmyG&_nc_oc=AdrpIVimB4UNevrVbSYC-4U6174DiiSy7lnNB7vu3FtTUjq9PAt89ocKeJy_QaNrKVlTfwFqoiJZMoO_9X3-LukQ&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEV9qbtlTScISJNXok61_aQ294bTa09aljYPTt0TOqTbQ&oe=69F46585', galleryImages: ['https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/658897639_2124390881659457_7147809031739594221_n.png?stp=dst-png_s843x403&_nc_cat=111&ccb=1-7&_nc_sid=0024fc&_nc_ohc=54FYXl2hp9QQ7kNvwEluT0H&_nc_oc=Adpa6Y54WVTQOaTzkIWluRGgl11iQaUpN7jLKSkYZGpF5e3CHz-iWvkq9r9sq5jm0-4JqM-McpeWgD5ruH4sYza4&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AFvXEgFI1VDazk3PbEHU1rMiJ-Gda04_Gtfe7I_gdcSzQ&oe=69F46764', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/656924080_4180196558906209_4441174656164308419_n.png?stp=dst-png_s526x395&_nc_cat=109&ccb=1-7&_nc_sid=0024fc&_nc_ohc=lSzE7Ny7FesQ7kNvwEHFRtc&_nc_oc=AdoC_5KC4q0BcFiytsEeujzOmkwaYGObAVbj7evOqHSjDCKVj5SnJg_RiIAGGva4cHJSBG8cdlcnXCn9xq6WAqca&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AE6tW75R6juOzUz1gtuT_FmZnKsTiadT2pKIN8tGbhe_A&oe=69F464CA', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/598061198_1480344283724462_897387539385843564_n.png?stp=dst-png_s480x480&_nc_cat=105&ccb=1-7&_nc_sid=0024fc&_nc_ohc=SnmsyQ5Y_nIQ7kNvwE83MT9&_nc_oc=AdqCRIqoLArAbSAght5sTtIAb2NWsjAzGVFHsfHzJDkDMmLqby27pI0QQAs6-DIIIwRTGKdpBmYXaRe0j1OBiEAM&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AFIz3wkBJ_LGDXFLKbkTofk373AvRetbowqRj_iVURrmg&oe=69F46A68'], slides: ['Início Neuropsy', 'Avaliação Neuropsicológica', 'Nossos Serviços'] },
             { id: 'psicologia-acolhimento', name: 'Michelle Aquino | Psicóloga', short: 'Comunicação humana com presença delicada.', long: 'Ideal para profissionais que desejam uma comunicação mais próxima e empática. Layout com foco em história, método de trabalho, áreas de atendimento e destaque para agendamento.', siteUrl: 'https://carolyneraquel26-sketch.github.io/Michelle-Aquino/', previewImage: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/662364891_2413611732438668_3280222727851557054_n.png?stp=dst-png_s552x414&_nc_cat=102&ccb=1-7&_nc_sid=0024fc&_nc_ohc=Ad00h_Q2JdsQ7kNvwF8qyGX&_nc_oc=Adrx4jsT0yfCWZVnDYeAdUbCA7aM0JQ-Z8hGVsV88e2sER5Or597UYTxsifB8C5jx5VZ-hnhCmOVhw64vI5I6jkc&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEqMN7Skv-Nicl7cW13fIJUa8qG7msVpXo4mOksJ_I41g&oe=69F45E0C', galleryImages: ['https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/662364891_2413611732438668_3280222727851557054_n.png?_nc_cat=102&ccb=1-7&_nc_sid=0024fc&_nc_ohc=Ad00h_Q2JdsQ7kNvwF8qyGX&_nc_oc=Adrx4jsT0yfCWZVnDYeAdUbCA7aM0JQ-Z8hGVsV88e2sER5Or597UYTxsifB8C5jx5VZ-hnhCmOVhw64vI5I6jkc&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AGUsIYz--dfiiQvZvgLq1GStEu_kHQYwz5VO9w7xnQHIw&oe=69F4964C', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/661797708_940706728684043_4658948711537350437_n.png?stp=dst-png_s600x600&_nc_cat=105&ccb=1-7&_nc_sid=0024fc&_nc_ohc=7z8GHav3R_EQ7kNvwHxJ8eo&_nc_oc=AdrRw3ZtBnU8Qa_YzkE1QV0zaQiMINY-eX8rrIz1yHzwAC4WtnshqfCKM_8ToIQD4JbAQp22zT4tR4BvzYe-gpY0&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AHvwBX4hx_jkQ7QvIA13kvpEMBdVeNwb27CW47gRPDEDw&oe=69F4802C', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/662368764_1580183633063166_557539146382111707_n.png?stp=dst-png_s526x395&_nc_cat=111&ccb=1-7&_nc_sid=0024fc&_nc_ohc=EcRh-gyBVA8Q7kNvwEtnjDx&_nc_oc=AdqB5AznQXqurqXQzTkvfvSp72n8X6fKNUHmO8_Bk27wQVfnRxFRqlhG2WYKDbX8Z8ubYnF8p5mgORznvZ_5C3_n&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEIyNkRXF1kPeW6MD47cIvj8qX0V6kIt9BwSfcmd6eIrQ&oe=69F4800B'], slides: ['Banner principal do modelo Acolhimento', 'Seção sobre a profissional', 'Página de serviços e agendamento'] },
             { id: 'psicologia-harmonia', name: 'Modelo Harmonia', short: 'Design limpo com autoridade e suavidade.', long: 'Pensado para transmitir confiança e equilíbrio. Traz uma estética minimalista com blocos claros de informação, perguntas frequentes, serviços e botão de contato direto.', siteUrl: 'https://es-d-7271310120260403-019d00f8-6c4a-7e27-ac75-53e9874e6f79.codepen.dev/#inicio', previewImage: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/663047899_1853934141987852_859014267793163347_n.png?stp=dst-png_s565x565&_nc_cat=108&ccb=1-7&_nc_sid=0024fc&_nc_ohc=XsZK0jnTnyQQ7kNvwHrWuMm&_nc_oc=AdpnFBj7rJ1JhIkl5DI3ME6VfSsBLk6AS5HX_BYobcfZiYt9L6IlYnKX9Ip4U2YHKiM-vtbAIiYok4I5qs3HalMh&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AE31CSCUKAPZ8IlULxHNCfM6GAKCZVe_91m7N2oS1Kcfw&oe=69F48218', galleryImages: ['https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/663047899_1853934141987852_859014267793163347_n.png?stp=dst-png_s565x565&_nc_cat=108&ccb=1-7&_nc_sid=0024fc&_nc_ohc=XsZK0jnTnyQQ7kNvwHrWuMm&_nc_oc=AdpnFBj7rJ1JhIkl5DI3ME6VfSsBLk6AS5HX_BYobcfZiYt9L6IlYnKX9Ip4U2YHKiM-vtbAIiYok4I5qs3HalMh&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AE31CSCUKAPZ8IlULxHNCfM6GAKCZVe_91m7N2oS1Kcfw&oe=69F48218', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/658862050_4564221327198046_1925535988102318967_n.png?stp=dst-png_s480x480&_nc_cat=110&ccb=1-7&_nc_sid=0024fc&_nc_ohc=DA8i1bQySKYQ7kNvwGhTYUP&_nc_oc=AdouetMsMQ4N5sR6cmym0Vwm5U_b-u0arQt-KnlSGhik2omBYmZLUZ0FwMBXBKvtS71kxi6wCMQHgn67UvEKI0Wi&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEerulh3t2GLcoqe9arSEMSC38LiYrm2-TxzjqosDBFSw&oe=69F49AFD', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/656022422_1270436151731797_8196207748796076055_n.png?stp=dst-png_s480x480&_nc_cat=100&ccb=1-7&_nc_sid=0024fc&_nc_ohc=iQSHGOkhgvMQ7kNvwGNm95B&_nc_oc=Ado40IjVnwD0ZcKCzWwnf1wASAx_rOVT5bTQMDFl8q7pr7F8nuaqcbCXz-UE-7Z03J6GbLraxFi4SvCqmaH_-okh&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AFf2gIeLP2veJ_2FZk9rOpnAOJzboEhjXOHzKSqNvVorg&oe=69F47C77'], slides: ['Home do modelo Harmonia', 'Sessões de serviços', 'FAQ e contato rápido'] }
           ]
@@ -1404,15 +1480,18 @@
           image: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/655636888_1291098539617738_9058214911184221712_n.png?stp=dst-png_s843x403&_nc_cat=108&ccb=1-7&_nc_sid=0024fc&_nc_ohc=jP33dLl83SAQ7kNvwH5F4qU&_nc_oc=Adqbk2jEDm4Tm11oCCbFe2SWvJZVcCiZ-wzw-Yq8Rx0VbvKt9noMuonVRMU2jyK9Z3aLwKpTpnr6EDiCT0SDmDyN&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEsCZvS-Wyx8WKz-NoapinwH-8nUzQZjlELTaccp94nTQ&oe=69F489B1',
           description: 'Sites sofisticados e confiáveis para psiquiatras e clínicas que querem reforçar credibilidade.',
           models: [
-            { id: 'psiquiatria-equilibrio', name: 'Modelo Equilíbrio', short: 'Presença forte e profissional.', long: 'Modelo ideal para psiquiatras que desejam comunicar seriedade e acolhimento. Estrutura com currículo, especialidades, perguntas frequentes e canal de contato.', siteUrl: 'https://seu-site-exemplo.com/psiquiatria-equilibrio', previewImage: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/655636888_1291098539617738_9058214911184221712_n.png?stp=dst-png_s843x403&_nc_cat=108&ccb=1-7&_nc_sid=0024fc&_nc_ohc=jP33dLl83SAQ7kNvwH5F4qU&_nc_oc=Adqbk2jEDm4Tm11oCCbFe2SWvJZVcCiZ-wzw-Yq8Rx0VbvKt9noMuonVRMU2jyK9Z3aLwKpTpnr6EDiCT0SDmDyN&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEsCZvS-Wyx8WKz-NoapinwH-8nUzQZjlELTaccp94nTQ&oe=69F489B1', galleryImages: ['https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/655636888_1291098539617738_9058214911184221712_n.png?stp=dst-png_s843x403&_nc_cat=108&ccb=1-7&_nc_sid=0024fc&_nc_ohc=jP33dLl83SAQ7kNvwH5F4qU&_nc_oc=Adqbk2jEDm4Tm11oCCbFe2SWvJZVcCiZ-wzw-Yq8Rx0VbvKt9noMuonVRMU2jyK9Z3aLwKpTpnr6EDiCT0SDmDyN&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEsCZvS-Wyx8WKz-NoapinwH-8nUzQZjlELTaccp94nTQ&oe=69F489B1','https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/655943994_1486860602815295_2911007672885756563_n.png?stp=dst-png_s480x480&_nc_cat=103&ccb=1-7&_nc_sid=0024fc&_nc_ohc=jNf5oSl8VjkQ7kNvwEoJsV3&_nc_oc=AdrZo_puSn_Jh2FSa4JZvmdvgKsHhJcstBxua1a0hE5tP9bXCQeDbxPklyuAlb4pXJ8gqxzW7kj8cfd2KTMoqodP&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AE_Xk1NpClEGkeNWgRO8siXD9Gd78XSPdcZJYRHl7YA8g&oe=69F484AB', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/656047675_2505413269958059_7106452064104031609_n.png?stp=dst-png_s526x395&_nc_cat=105&ccb=1-7&_nc_sid=0024fc&_nc_ohc=Yu7H0o9lSzUQ7kNvwHMi-Wo&_nc_oc=AdosuQFB0LkUMRsw8DyxRMVmEaztJ5_DHcpYVCTdx6uMusV3UdV76UQz4EOFU3f4-xWXEzu9mY4QXUG5FmzHpHuT&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AHGRH4hg7JXGjQBNkmenWvw1P3qehzPQgg-rXo9xtvN2A&oe=69F4B748'], slides: ['Home Equilíbrio', 'Especialidades médicas', 'Contato com CTA'] }, 
-            { id: 'psiquiatria-essencia', name: 'Modelo Essência', short: 'Design suave com foco institucional.', long: 'Layout limpo para clínicas e atendimento particular, com destaque para diferenciais, equipe e facilidade no contato.', siteUrl: 'https://seu-site-exemplo.com/psiquiatria-essencia', slides: ['Home Essência', 'Equipe e diferenciais', 'Contato institucional'] }
+            { id: 'psiquiatria-equilibrio', name: 'Modelo Equilíbrio', short: 'Presença forte e profissional.', long: 'Modelo ideal para psiquiatras que desejam comunicar seriedade e acolhimento. Estrutura com currículo, especialidades, perguntas frequentes e canal de contato.', siteUrl: 'https://amybelloy.github.io/Dra.-Ana-Beatriz-Psquiatra/', previewImage: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/655636888_1291098539617738_9058214911184221712_n.png?stp=dst-png_s843x403&_nc_cat=108&ccb=1-7&_nc_sid=0024fc&_nc_ohc=jP33dLl83SAQ7kNvwH5F4qU&_nc_oc=Adqbk2jEDm4Tm11oCCbFe2SWvJZVcCiZ-wzw-Yq8Rx0VbvKt9noMuonVRMU2jyK9Z3aLwKpTpnr6EDiCT0SDmDyN&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEsCZvS-Wyx8WKz-NoapinwH-8nUzQZjlELTaccp94nTQ&oe=69F489B1', galleryImages: ['https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/655636888_1291098539617738_9058214911184221712_n.png?stp=dst-png_s843x403&_nc_cat=108&ccb=1-7&_nc_sid=0024fc&_nc_ohc=jP33dLl83SAQ7kNvwH5F4qU&_nc_oc=Adqbk2jEDm4Tm11oCCbFe2SWvJZVcCiZ-wzw-Yq8Rx0VbvKt9noMuonVRMU2jyK9Z3aLwKpTpnr6EDiCT0SDmDyN&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEsCZvS-Wyx8WKz-NoapinwH-8nUzQZjlELTaccp94nTQ&oe=69F489B1', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/655943994_1486860602815295_2911007672885756563_n.png?stp=dst-png_s480x480&_nc_cat=103&ccb=1-7&_nc_sid=0024fc&_nc_ohc=jNf5oSl8VjkQ7kNvwEoJsV3&_nc_oc=AdrZo_puSn_Jh2FSa4JZvmdvgKsHhJcstBxua1a0hE5tP9bXCQeDbxPklyuAlb4pXJ8gqxzW7kj8cfd2KTMoqodP&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AE_Xk1NpClEGkeNWgRO8siXD9Gd78XSPdcZJYRHl7YA8g&oe=69F484AB', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/656047675_2505413269958059_7106452064104031609_n.png?stp=dst-png_s526x395&_nc_cat=105&ccb=1-7&_nc_sid=0024fc&_nc_ohc=Yu7H0o9lSzUQ7kNvwHMi-Wo&_nc_oc=AdosuQFB0LkUMRsw8DyxRMVmEaztJ5_DHcpYVCTdx6uMusV3UdV76UQz4EOFU3f4-xWXEzu9mY4QXUG5FmzHpHuT&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AHGRH4hg7JXGjQBNkmenWvw1P3qehzPQgg-rXo9xtvN2A&oe=69F4B748', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/659779723_987454347276986_113748876753375041_n.png?stp=dst-png_s640x640&_nc_cat=110&ccb=1-7&_nc_sid=0024fc&_nc_ohc=l3sCTW427OoQ7kNvwHUr_tp&_nc_oc=AdrVO4oM-5SoMwTq08Fwo6eSaZXxzdvEvJgDit8jVizN0hNasiP_0fDdjeSWmhYRWW931bGGhL_LUjbAC2UIWJgS&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AH9jGHwG8wXwUw69kewlthv5Og6aDwW8rOaytkWZs54PQ&oe=69F4910B'], slides: ['Home Equilíbrio', 'Especialidades médicas', 'Contato com CTA'] },
+            { id: 'psiquiatria-essencia', name: 'Modelo Essência', short: 'Design suave com foco institucional.', long: 'Layout limpo para clínicas e atendimento particular, com destaque para diferenciais, equipe e facilidade no contato.', siteUrl: 'https://seu-site-exemplo.com/psiquiatria-essencia', previewImage: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/656995159_922785930661941_3876920035250329738_n.png?stp=dst-png_s720x720&_nc_cat=108&ccb=1-7&_nc_sid=0024fc&_nc_ohc=77Yme_o9dsMQ7kNvwE7lHgi&_nc_oc=AdpwEKGAgSOyHMpGde4GVUaZpj1G5wZiFIw-k_ZEo6E6Pquv4QN1s2y9I1-wH4MOv7poBDVlhdleBhjQ4QV0em8O&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AF25yTaUvDBS-UqCUqbOw60Ey5YWt4ytTBFEgYNbv4ACg&oe=69F4ADE6', galleryImages: ['https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/656995159_922785930661941_3876920035250329738_n.png?stp=dst-png_s720x720&_nc_cat=108&ccb=1-7&_nc_sid=0024fc&_nc_ohc=77Yme_o9dsMQ7kNvwE7lHgi&_nc_oc=AdpwEKGAgSOyHMpGde4GVUaZpj1G5wZiFIw-k_ZEo6E6Pquv4QN1s2y9I1-wH4MOv7poBDVlhdleBhjQ4QV0em8O&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AF25yTaUvDBS-UqCUqbOw60Ey5YWt4ytTBFEgYNbv4ACg&oe=69F4ADE6', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/659779723_987454347276986_113748876753375041_n.png?stp=dst-png_s640x640&_nc_cat=110&ccb=1-7&_nc_sid=0024fc&_nc_ohc=l3sCTW427OoQ7kNvwHUr_tp&_nc_oc=AdrVO4oM-5SoMwTq08Fwo6eSaZXxzdvEvJgDit8jVizN0hNasiP_0fDdjeSWmhYRWW931bGGhL_LUjbAC2UIWJgS&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AH9jGHwG8wXwUw69kewlthv5Og6aDwW8rOaytkWZs54PQ&oe=69F4910B', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/661640094_1487617106050954_3347727755273747553_n.png?stp=dst-png_s526x395&_nc_cat=107&ccb=1-7&_nc_sid=0024fc&_nc_ohc=voF1SBfg5xgQ7kNvwGOHpdj&_nc_oc=Adok3jKAhOf23e2JBfwU-92mQxVWbwNXhqzQIFwojIi1r8nS8qaS8PPkwVnfKeq7zpIw2YLu9Q5DYMxrqQeVUqSe&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AE1oeHbXB9gP4dM0KOf8BNuSZakFyyEPJeGsv7PRCMJqw&oe=69F4A8DF'], slides: ['Home Essência', 'Equipe e diferenciais', 'Contato institucional'] }
           ]
         },
         pizzaria: {
           title: 'Pizzaria',
+          image: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/654674195_1700571881109575_7135777924356294897_n.png?stp=dst-png_p394x394&_nc_cat=107&ccb=1-7&_nc_sid=0024fc&_nc_ohc=iBIDsbM66JsQ7kNvwFQX3YQ&_nc_oc=Adq7rkBZdT6e4zBLcXvclLHBqcH-xs4eOeIgrQmet8GFmtgwvcEPkTcLkST66u51amf75fhb82AnVsQX2ejf4lDU&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AFGquUrxpuxQe4wPqovwz-gqI0yCxEyAY8ee6ez7fQyQA&oe=69F4B241',
           description: 'Modelos visuais irresistíveis para delivery e restaurantes com cardápio dinâmico.',
           models: [
-            { id: 'pizzaria-sabor', name: 'Bella Massa', short: 'Visual para delivery.', long: 'Um site com foco no seu cardápio e conversão para delivery via WhatsApp.', siteUrl: 'https://seu-site-exemplo.com/pizzaria', previewImage: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/654674195_1700571881109575_7135777924356294897_n.png?stp=dst-png_p394x394&_nc_cat=107&ccb=1-7&_nc_sid=0024fc&_nc_ohc=XcIkLtqMYj8Q7kNvwFaIgYp&_nc_oc=AdosEGkXGKxmW3DdjPk0XNtOC967Ieuym5TIoByBud6omp5l7QHHDO6gUf2BVTr2e2TAphhmrPadDZ-bFDE0i8QG&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD4wH_i8Q4906yIztwVq7Shqj9jkIzNFIU6dSbgEXSCSSRqg&oe=69EFDCC1', galleryImages: ['https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/654674195_1700571881109575_7135777924356294897_n.png?stp=dst-png_p394x394&_nc_cat=107&ccb=1-7&_nc_sid=0024fc&_nc_ohc=XcIkLtqMYj8Q7kNvwFaIgYp&_nc_oc=AdosEGkXGKxmW3DdjPk0XNtOC967Ieuym5TIoByBud6omp5l7QHHDO6gUf2BVTr2e2TAphhmrPadDZ-bFDE0i8QG&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD4wH_i8Q4906yIztwVq7Shqj9jkIzNFIU6dSbgEXSCSSRqg&oe=69EFDCC1', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/655939119_1445111677365422_9139856225601166301_n.png?stp=dst-png_s590x590&_nc_cat=108&ccb=1-7&_nc_sid=0024fc&_nc_ohc=_pU4fnHEXycQ7kNvwEupP5l&_nc_oc=Adon7GzuVjroOXrSONGh41856PAp-AFcENZ2MvYa-f3BJbDJT7F4foua8r4-wcg3Lbi3TOuQnead0_G-AlMOEJsS&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD4wHGA7MWkq5h26XaiVJkI39BgSmSIh0tDz7eOXMR32R8kA&oe=69EFC5E2', 'https://instagram.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/597424224_1506016887561496_5719278641120165983_n.png?stp=dst-png_s565x565&_nc_cat=108&ccb=7-5&_nc_sid=0024fc&_nc_ohc=R34aa8dXw-gQ7kNvwGO46aJ&_nc_oc=AdpN-g9FwyZoNvBR-E-x6N5RLUCvTxPCGIH2NnbG7mLPqV0fab1aWV05p8S27mOgTj0hBZIngOHsP4Y5tclXqRWz&_nc_zt=23&_nc_ht=instagram.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD4wFOO3JdqesZ3vujxhvz-mQLt2RyLexK21RNLH4lo74Yjw&oe=69EFD15A'], slides: ['Início Bella Massa', 'Cardápio', 'Delivery'] }
+            { id: 'pizzaria-sabor', name: 'Bella Massa', short: 'Visual para delivery.', long: 'Um site com foco no seu cardápio e conversão para delivery via WhatsApp.', siteUrl: 'https://seu-site-exemplo.com/pizzaria', previewImage: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/654674195_1700571881109575_7135777924356294897_n.png?stp=dst-png_p394x394&_nc_cat=107&ccb=1-7&_nc_sid=0024fc&_nc_ohc=iBIDsbM66JsQ7kNvwFQX3YQ&_nc_oc=Adq7rkBZdT6e4zBLcXvclLHBqcH-xs4eOeIgrQmet8GFmtgwvcEPkTcLkST66u51amf75fhb82AnVsQX2ejf4lDU&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AFGquUrxpuxQe4wPqovwz-gqI0yCxEyAY8ee6ez7fQyQA&oe=69F4B241', galleryImages: ['https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/654674195_1700571881109575_7135777924356294897_n.png?stp=dst-png_p394x394&_nc_cat=107&ccb=1-7&_nc_sid=0024fc&_nc_ohc=XcIkLtqMYj8Q7kNvwFaIgYp&_nc_oc=AdosEGkXGKxmW3DdjPk0XNtOC967Ieuym5TIoByBud6omp5l7QHHDO6gUf2BVTr2e2TAphhmrPadDZ-bFDE0i8QG&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD4wH_i8Q4906yIztwVq7Shqj9jkIzNFIU6dSbgEXSCSSRqg&oe=69EFDCC1', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/655939119_1445111677365422_9139856225601166301_n.png?stp=dst-png_s590x590&_nc_cat=108&ccb=1-7&_nc_sid=0024fc&_nc_ohc=_pU4fnHEXycQ7kNvwEupP5l&_nc_oc=Adon7GzuVjroOXrSONGh41856PAp-AFcENZ2MvYa-f3BJbDJT7F4foua8r4-wcg3Lbi3TOuQnead0_G-AlMOEJsS&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD4wHGA7MWkq5h26XaiVJkI39BgSmSIh0tDz7eOXMR32R8kA&oe=69EFC5E2', 'https://instagram.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/597424224_1506016887561496_5719278641120165983_n.png?stp=dst-png_s565x565&_nc_cat=108&ccb=7-5&_nc_sid=0024fc&_nc_ohc=R34aa8dXw-gQ7kNvwGO46aJ&_nc_oc=AdpN-g9FwyZoNvBR-E-x6N5RLUCvTxPCGIH2NnbG7mLPqV0fab1aWV05p8S27mOgTj0hBZIngOHsP4Y5tclXqRWz&_nc_zt=23&_nc_ht=instagram.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD4wFOO3JdqesZ3vujxhvz-mQLt2RyLexK21RNLH4lo74Yjw&oe=69EFD15A'], slides: ['Início Bella Massa', 'Cardápio', 'Delivery'] },
+            { id: 'pizzaria-variedade', name: 'Doces e Trufas', short: 'Foco em diversidade.', long: 'Um modelo versátil para docerias com grande variedade de sabores e promoções combinadas.', siteUrl: 'https://seu-site-exemplo.com/pizzaria-sabor', previewImage: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/658072392_1632882431233557_5102120227390839163_n.png?stp=dst-png_p394x394&_nc_cat=105&ccb=1-7&_nc_sid=0024fc&_nc_ohc=fQZXLo9yclkQ7kNvwH0FWxD&_nc_oc=Ado2hFcbtom7hGHL_LwCD6k-n0zIE9aAHGaBD9X0uSSqmRe95dxMfIuhOURErF0vl7e_E6yrVqhNPRaY2EWsALUb&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEJg4eB6_lnjZ6tJnf6qc1TDxcixZOF6KMbtpRD5mVT4w&oe=69F4D66C', galleryImages: ['https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/658072392_1632882431233557_5102120227390839163_n.png?stp=dst-png_p394x394&_nc_cat=105&ccb=1-7&_nc_sid=0024fc&_nc_ohc=fQZXLo9yclkQ7kNvwH0FWxD&_nc_oc=Ado2hFcbtom7hGHL_LwCD6k-n0zIE9aAHGaBD9X0uSSqmRe95dxMfIuhOURErF0vl7e_E6yrVqhNPRaY2EWsALUb&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEJg4eB6_lnjZ6tJnf6qc1TDxcixZOF6KMbtpRD5mVT4w&oe=69F4D66C', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/660405934_1574265143642825_8645925166271046749_n.png?stp=dst-png_s600x600&_nc_cat=102&ccb=1-7&_nc_sid=0024fc&_nc_ohc=c8BD1EBYZtIQ7kNvwFwcv1Y&_nc_oc=AdrRcbV6VHJPOkUeuWNeqJxGhbWEKoYZSkiSWrdQmGS4W5sMpOCJaSLxOmfnFGlpfWhE0Qo7YdREsqChFG1Ul0ob&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AG5kBMs0Dc3OgYMsdhTGXP9CJGsJ8NSIteZAhXTHr_ImQ&oe=69F4BAA0', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/660405934_1574265143642825_8645925166271046749_n.png?stp=dst-png_s600x600&_nc_cat=102&ccb=1-7&_nc_sid=0024fc&_nc_ohc=c8BD1EBYZtIQ7kNvwFwcv1Y&_nc_oc=AdrRcbV6VHJPOkUeuWNeqJxGhbWEKoYZSkiSWrdQmGS4W5sMpOCJaSLxOmfnFGlpfWhE0Qo7YdREsqChFG1Ul0ob&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AG5kBMs0Dc3OgYMsdhTGXP9CJGsJ8NSIteZAhXTHr_ImQ&oe=69F4BAA0'], slides: ['Nossas Trufas', 'Cardápio Completo'] },
+            { id: 'pizzaria-artesanal', name: 'Artesanal Premium', short: 'Estética rústica e elegante.', long: 'Ideal para pizzarias artesanais que prezam por ingredientes selecionados e um ambiente acolhedor.', siteUrl: 'https://seu-site-exemplo.com/pizzaria-artesanal', slides: ['Nossa Massa', 'Ingredientes', 'Reservas'] }
           ]
         },
         barbearia: {
@@ -1527,6 +1606,7 @@
     function renderCategories() {
       document.getElementById('customCategories').innerHTML = Object.entries(DATA.custom).map(([key, item]) => categoryCardMarkup(item, 'custom', key)).join('');
       document.querySelectorAll('.category-card').forEach(card => card.addEventListener('click', () => openModelList(card.dataset.type, card.dataset.key)));
+      observeElements();
     }
     function modelCardMarkup(model) {
       const linkText = model.isDirectRequest ? 'Solicitar agora →' : 'Abrir modelo →';
@@ -1546,13 +1626,13 @@
         const model = source.models.find(m => m.id === modelId);
         if (model.isDirectRequest) {
           openRoute('contact');
-          // Prefill message if possible
           const msgField = document.getElementById('messageField');
           if (msgField) msgField.value = `Gostaria de solicitar um orçamento para: ${model.name}`;
         } else {
           openDetail(model);
         }
       }));
+      observeElements();
       showPage('modelList');
     }
     document.getElementById('backToCategory').addEventListener('click', (e) => { e.preventDefault(); openRoute(currentCategoryType); });
@@ -1575,8 +1655,8 @@
       renderGallery(model); showPage('detail');
     }
     document.getElementById('backToModels').addEventListener('click', (e) => { e.preventDefault(); openModelList(currentCategoryType, currentCategoryKey); });
-    document.getElementById('detailPrev').addEventListener('click', () => { if (!currentModel) return; currentSlide = (currentSlide - 1 + currentModel.slides.length) % currentModel.slides.length; updateGallery(); });
-    document.getElementById('detailNext').addEventListener('click', () => { if (!currentModel) return; currentSlide = (currentSlide + 1) % currentModel.slides.length; updateGallery(); });
+    document.getElementById('detailPrev').addEventListener('click', () => { if (!currentModel) return; currentSlide = (currentSlide - 1 + currentModel.galleryImages.length) % currentModel.galleryImages.length; updateGallery(); });
+    document.getElementById('detailNext').addEventListener('click', () => { if (!currentModel) return; currentSlide = (currentSlide + 1) % currentModel.galleryImages.length; updateGallery(); });
     document.getElementById('detailAltBtn').addEventListener('click', () => openModelList(currentCategoryType, currentCategoryKey));
     function renderHomeShop() {
       const wrap = document.getElementById('shopCarousel');
@@ -1588,17 +1668,51 @@
       wrap.querySelectorAll('.shop-card').forEach(card => card.addEventListener('click', () => { const type = card.dataset.category; const key = card.dataset.key; const id = card.dataset.id; currentCategoryType = type; currentCategoryKey = key; const model = DATA[type][key].models.find(m => m.id === id) || DATA[type][key].models[0]; openDetail(model); }));
       document.getElementById('shopPrev').addEventListener('click', () => wrap.scrollBy({ left: -280, behavior: 'smooth' }));
       document.getElementById('shopNext').addEventListener('click', () => wrap.scrollBy({ left: 280, behavior: 'smooth' }));
+      observeElements();
     }
-    function setupContactAction() {
-      document.getElementById('sendMessageBtn').addEventListener('click', () => {
-        const name = document.getElementById('nameField').value.trim(); const phone = document.getElementById('phoneField').value.trim();
-        const email = document.getElementById('emailField').value.trim(); const message = document.getElementById('messageField').value.trim();
-        const text = `Olá! Meu nome é ${name || 'Cliente'}%0Atelefone: ${phone || '-'}%0Aemail: ${email || '-'}%0AMensagem:%0A${message || 'Gostaria de solicitar um orçamento.'}`;
-        const url = CONFIG.whatsapp.includes('?') ? `${CONFIG.whatsapp}&text=${text}` : `${CONFIG.whatsapp}?text=${text}`;
-        window.open(url, '_blank');
+    function setupMobileMenu() {
+      const menuToggle = document.getElementById('menuToggle');
+      const mainNav = document.getElementById('mainNav');
+      if (!menuToggle || !mainNav) return;
+
+      menuToggle.addEventListener('click', (e) => {
+        e.stopPropagation();
+        mainNav.classList.toggle('open');
+        const isOpen = mainNav.classList.contains('open');
+        menuToggle.innerHTML = isOpen
+          ? '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>'
+          : '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
+      });
+
+      document.addEventListener('click', (e) => {
+        if (mainNav.classList.contains('open') && !mainNav.contains(e.target) && e.target !== menuToggle) {
+          mainNav.classList.remove('open');
+          menuToggle.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
+        }
+      });
+
+      mainNav.querySelectorAll('a, button').forEach(link => {
+        link.addEventListener('click', () => {
+          mainNav.classList.remove('open');
+          menuToggle.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>';
+        });
       });
     }
-    applyConfig(); renderCategories(); renderHomeShop(); setupContactAction();
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('visible');
+          observer.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    function observeElements() {
+      document.querySelectorAll('.category-card, .model-card, .shop-card').forEach(el => observer.observe(el));
+    }
+
+    applyConfig(); renderCategories(); renderHomeShop(); setupContactAction(); setupMobileMenu(); observeElements();
   </script>
 </body>
 
