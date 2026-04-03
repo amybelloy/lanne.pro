@@ -7,34 +7,77 @@
   <title>Lanne.pro</title>
   <link rel="icon" type="image/png"
     href="https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/629364501_4422666904632207_7379444142402497270_n.png?stp=dst-png_s480x480&_nc_cat=106&ccb=1-7&_nc_sid=0024fc&_nc_ohc=63p45pJuT5IQ7kNvwGMya-z&_nc_oc=AdoaspWZvA2iuUW2iWRRB3tXOAADoyUdy61HCzwhOvCQ3pVHxIEWg78Hfq8WqnQlQLpJ35QiU8PHAYiFWpigcJGu&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD4wHX8gb424l_lmxjb1qQbG_d25tcgezB5hv-KdXYIG4T9Q&oe=69EA261F" />
+  
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
 
   <style>
     :root {
-      --black: #000000;
+      --bg: #ffffff;
+      --surface: #fafafa;
+      --card: #ffffff;
+      --glass: rgba(0, 0, 0, 0.02);
+      --glass-border: rgba(0, 0, 0, 0.08);
+      --accent: #000000;
+      --accent-glow: rgba(0, 0, 0, 0.05);
+      --text: #000000;
+      --text-muted: #666666;
       --white: #ffffff;
-      --paper: #f3f3f3;
-      --text: #111111;
-      --muted: #6d6d6d;
-      --line: rgb(0, 0, 0);
+      --black: #000000;
+      --primary-gradient: linear-gradient(135deg, #000000 0%, #333333 100%);
       --container: 1120px;
-      --radius-sm: 3px;
-      --radius-md: 4px;
-      --shadow: 0 10px 30px rgba(0, 0, 0, .08);
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 20px;
+      --shadow: 0 20px 40px rgba(0, 0, 0, .1);
     }
 
     * {
-      box-sizing: border-box
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
     }
 
     html {
-      scroll-behavior: smooth
+      scroll-behavior: smooth;
     }
 
     body {
       margin: 0;
-      font-family: Georgia, "Times New Roman", serif;
-      background: var(--black);
-      color: var(--white);
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      overflow-x: hidden;
+    }
+
+    .aurora {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .aurora-blur {
+      position: absolute;
+      width: 60vw;
+      height: 60vw;
+      background: radial-gradient(circle, rgba(0,0,0,0.05) 0%, rgba(255,255,255,0) 70%);
+      filter: blur(120px);
+      border-radius: 50%;
+      opacity: 0.1;
+      animation: auroraMove 25s infinite alternate ease-in-out;
+    }
+
+    @keyframes auroraMove {
+      0% { transform: translate(-10%, -10%) scale(1); }
+      100% { transform: translate(40%, 30%) scale(1.2); }
     }
 
     html::-webkit-scrollbar {
@@ -42,17 +85,17 @@
     }
 
     html::-webkit-scrollbar-track {
-      background: var(--black);
+      background: var(--white);
     }
 
     html::-webkit-scrollbar-thumb {
-      background: #2a2a2a;
+      background: #e0e0e0;
       border-radius: 10px;
-      border: 3px solid var(--black);
+      border: 3px solid var(--white);
     }
 
     html::-webkit-scrollbar-thumb:hover {
-      background: #444;
+      background: #cccccc;
     }
 
     a {
@@ -77,16 +120,24 @@
     }
 
     .site-header {
-      position: sticky;
+      position: fixed;
       top: 0;
-      z-index: 300;
-      background: rgba(0, 0, 0, .97);
-      border-bottom: 1px solid rgba(255, 255, 255, .05);
-      backdrop-filter: blur(8px);
+      width: 100%;
+      z-index: 1000;
+      background: rgba(0, 0, 0, 0.85);
+      border-bottom: 1px solid var(--glass-border);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      transition: all 0.3s ease;
+    }
+
+    .site-header.scrolled {
+      background: rgba(0, 0, 0, 0.95);
+      padding: 4px 0;
     }
 
     .header-inner {
-      min-height: 52px;
+      min-height: 70px;
       display: grid;
       grid-template-columns: 1fr auto 1fr;
       align-items: center;
@@ -94,9 +145,11 @@
     }
 
     .logo {
-      font-size: 1.7rem;
-      font-weight: 700;
-      letter-spacing: -.04em;
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.6rem;
+      font-weight: 800;
+      letter-spacing: -.03em;
+      color: var(--white);
       white-space: nowrap;
     }
 
@@ -104,10 +157,40 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      gap: 26px;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: .68rem;
-      font-weight: 700;
+      gap: 32px;
+      font-size: .88rem;
+      font-weight: 500;
+    }
+
+    .nav-link,
+    .drop-trigger {
+      background: none;
+      border: 0;
+      color: rgba(255, 255, 255, 0.7);
+      cursor: pointer;
+      padding: 10px 0;
+      transition: color 0.2s ease, transform 0.2s ease;
+      position: relative;
+    }
+
+    .nav-link:hover,
+    .drop-trigger:hover {
+      color: var(--white);
+    }
+
+    .nav-link::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--white);
+      transition: width 0.3s ease;
+    }
+
+    .nav-link:hover::after {
+      width: 100%;
     }
 
     .nav-link,
@@ -132,8 +215,8 @@
       height: 22px;
       display: grid;
       place-items: center;
-      color: #fff;
-      opacity: .96;
+      color: var(--white);
+      opacity: .7;
       transition: transform .18s ease, opacity .18s ease;
     }
 
@@ -219,56 +302,35 @@
     }
 
     .hero {
-      min-height: calc(100vh - 52px);
-      background: transparent;
+      min-height: 100vh;
       display: flex;
       align-items: center;
-    }
-
-    .hero-inner {
-      width: 100%;
-      padding: 90px 0 110px;
-      display: flex;
-      justify-content: flex-start;
-    }
-
-    .hero-copy {
-      width: min(690px, 100%);
-      margin-left: 108px;
-    }
-
-    .eyebrow {
-      font-family: Arial, Helvetica, sans-serif;
-      text-transform: uppercase;
-      letter-spacing: .32em;
-      color: #777;
-      font-size: 1.04rem;
-      font-weight: 700;
-      margin-bottom: 24px;
+      padding-top: 70px;
     }
 
     .hero h1 {
+      font-family: 'Outfit', sans-serif;
       margin: 0;
-      font-size: clamp(4.4rem, 7.6vw, 6.4rem);
-      line-height: .92;
-      letter-spacing: -.07em;
-      font-weight: 700;
-      max-width: 690px;
+      font-size: clamp(3.5rem, 8vw, 6.5rem);
+      line-height: 1;
+      letter-spacing: -.06em;
+      font-weight: 800;
+      max-width: 850px;
     }
 
     .hero h1 em {
-      font-style: italic;
-      display: block;
+      font-style: normal;
+      color: var(--black);
+      display: inline-block;
     }
 
     .hero p {
-      margin: 24px 0 0;
-      max-width: 540px;
-      color: #a9a9a9;
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 1.02rem;
-      line-height: 1.62;
-      font-weight: 700;
+      margin: 32px 0 0;
+      max-width: 580px;
+      color: var(--text-muted);
+      font-size: 1.15rem;
+      line-height: 1.6;
+      font-weight: 400;
     }
 
     .hero-actions {
@@ -282,75 +344,68 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-      gap: 10px;
-      min-height: 44px;
-      padding: 0 26px;
+      gap: 12px;
+      min-height: 54px;
+      padding: 0 32px;
       border: 1px solid transparent;
-      border-radius: 999px;
+      border-radius: var(--radius-md);
       cursor: pointer;
-      transition: .18s ease;
-      font-family: Arial, Helvetica, sans-serif;
-      font-weight: 700;
-      letter-spacing: .01em;
-      font-size: .92rem;
-    }
-
-    .btn:hover {
-      transform: translateY(-1px)
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      font-weight: 600;
+      font-size: 1rem;
+      position: relative;
+      overflow: hidden;
     }
 
     .btn-primary {
-      background: #fff;
-      color: #111
+      background: var(--primary-gradient);
+      color: var(--white);
+      box-shadow: 0 8px 24px var(--accent-glow);
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px var(--accent-glow);
     }
 
     .btn-secondary {
-      background: transparent;
-      color: #fff;
-      border-color: rgba(255, 255, 255, .18)
+      background: var(--surface);
+      color: var(--black);
+      border-color: var(--glass-border);
     }
 
-    .btn-dark {
-      background: #111;
-      color: #fff
-    }
-
-    .btn-outline-dark {
-      background: transparent;
-      color: #111;
-      border: 1px solid #111
-    }
-
-    .btn-light {
-      background: #fff;
-      color: #111;
-      border: 1px solid #d7d7d7
+    .btn-secondary:hover {
+      background: #eeeeee;
+      transform: translateY(-2px);
     }
 
     .white-section {
-      background: var(--paper);
+      background: var(--surface);
       color: var(--text);
-      padding: 88px 0;
+      padding: 120px 0;
+      position: relative;
     }
 
     .black-section {
-      background: #000;
-      color: #fff;
-      padding: 88px 0;
+      background: var(--bg);
+      color: var(--text);
+      padding: 120px 0;
     }
 
     .section-grid {
       display: grid;
-      grid-template-columns: .82fr 1.18fr;
-      gap: 40px;
+      grid-template-columns: 1fr 1.2fr;
+      gap: 60px;
       align-items: start;
     }
 
     .section-title {
+      font-family: 'Outfit', sans-serif;
       margin: 0;
-      font-size: clamp(2rem, 5vw, 3.25rem);
-      line-height: .97;
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      line-height: 1;
       letter-spacing: -.04em;
+      font-weight: 700;
     }
 
     .section-text,
@@ -359,10 +414,9 @@
     .page-hero p,
     .contact-meta,
     .card-desc {
-      font-family: Arial, Helvetica, sans-serif;
-      line-height: 1.82;
-      font-size: 1rem;
-      color: #444;
+      line-height: 1.8;
+      font-size: 1.05rem;
+      color: var(--text-muted);
     }
 
     .angled-showcase {
@@ -396,25 +450,26 @@
 
     .shot {
       position: absolute;
-      width: 220px;
-      height: 146px;
-      background: #fff;
-      border: 1px solid rgba(0, 0, 0, .08);
-      border-radius: 4px;
+      width: 260px;
+      height: 170px;
+      background: var(--card);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-md);
       overflow: hidden;
-      box-shadow: 0 14px 32px rgba(0, 0, 0, .12);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(8px);
     }
 
     .shot.left {
-      left: 18px;
-      top: 34px;
-      transform: rotate(-9deg)
+      left: 0;
+      top: 40px;
+      transform: rotate(-8deg) translateX(-10%);
     }
 
     .shot.right {
-      right: 18px;
-      top: 18px;
-      transform: rotate(10deg)
+      right: 0;
+      top: 20px;
+      transform: rotate(8deg) translateX(10%);
     }
 
     .shot .screen {
@@ -511,65 +566,90 @@
     }
 
     .carousel::-webkit-scrollbar-thumb {
-      background: linear-gradient(90deg, #6366f1, #000000);
+      background: #cccccc;
       border-radius: 10px;
-      border: 4px solid var(--paper);
+      border: 4px solid var(--white);
     }
 
     .carousel::-webkit-scrollbar-thumb:hover {
-      background: linear-gradient(90deg, #4f46e5, #000000);
+      background: #bbbbbb;
     }
 
     .shop-card {
-      min-width: 260px;
-      max-width: 260px;
-      background: #fff;
-      color: #111;
-      border: 1px solid rgba(0, 0, 0, .06);
-      border-radius: 4px;
+      min-width: 300px;
+      max-width: 300px;
+      background: var(--card);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
       overflow: hidden;
-      box-shadow: var(--shadow);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
       scroll-snap-align: start;
       cursor: pointer;
     }
 
+    .shop-card:hover {
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-10px);
+      border-color: var(--accent);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4), 0 0 20px var(--accent-glow);
+    }
+
     .shop-card .thumb {
-      height: 170px;
-      background: #f3f3f3;
+      height: 200px;
       overflow: hidden;
-      border-bottom: 1px solid rgba(0, 0, 0, .06);
+      position: relative;
+      transform-style: preserve-3d;
+    }
+
+    .shop-card .thumb::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      height: 50%;
+      background: linear-gradient(to top, var(--surface), transparent);
     }
 
     .shop-card .thumb img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 0.6s ease;
+    }
+
+    .shop-card:hover .thumb img {
+      transform: scale(1.1);
     }
 
     .shop-card .info {
-      padding: 16px
+      padding: 24px;
     }
 
     .shop-card h4 {
-      margin: 0 0 8px;
-      font-size: 1.03rem;
-      color: #111;
+      font-family: 'Outfit', sans-serif;
+      margin: 0 0 10px;
+      font-size: 1.25rem;
+      color: var(--white);
     }
 
     .shop-card p {
       margin: 0;
-      font-family: Arial, Helvetica, sans-serif;
-      color: #555;
-      font-size: .93rem;
+      color: var(--text-muted);
+      font-size: .95rem;
       line-height: 1.6;
     }
 
     .shop-card small {
       display: inline-block;
-      margin-top: 10px;
-      font-family: Arial, Helvetica, sans-serif;
-      font-weight: 700;
-      color: #111;
+      margin-top: 16px;
+      font-weight: 600;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      font-size: 0.75rem;
     }
 
     .carousel-nav {
@@ -629,12 +709,17 @@
 
     .category-card,
     .model-card {
-      border-radius: 4px;
-      overflow: hidden;
-      transition: all .45s cubic-bezier(0.23, 1, 0.32, 1);
+      background: var(--card);
+      border: 1px solid var(--glass-border);
+      border-radius: var(--radius-lg);
+      overflow: visible;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
       cursor: pointer;
       opacity: 0;
-      transform: translateY(30px);
+      transform: translateY(40px);
+      transform-style: preserve-3d;
     }
 
     .category-card.visible,
@@ -643,39 +728,37 @@
       transform: translateY(0);
     }
 
-    .category-card:hover {
-      transform: translateY(-8px) scale(1.01);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, .3);
-    }
-
+    .category-card:hover,
     .model-card:hover {
-      transform: translateY(-8px) scale(1.01);
-      box-shadow: 0 20px 40px rgba(0, 0, 0, .15);
-    }
-
-    .category-card {
-      background: #fff;
-      color: #111;
-      border: 1px solid rgba(255, 255, 255, .08);
-    }
-
-    .model-card {
-      background: #ededed;
-      color: #111;
-      border: 1px solid rgba(0, 0, 0, .06);
+      background: rgba(255, 255, 255, 0.08);
+      transform: translateY(-12px) scale(1.02);
+      border-color: var(--accent);
+      box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5), 0 0 30px var(--accent-glow);
     }
 
     .card-thumb {
-      height: 190px;
-      background: #f3f3f3;
+      height: 220px;
       overflow: hidden;
       position: relative;
+    }
+
+    .card-thumb::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, var(--surface) 0%, transparent 60%);
     }
 
     .card-thumb img {
       width: 100%;
       height: 100%;
       object-fit: cover;
+      transition: transform 0.8s ease;
+    }
+
+    .category-card:hover .card-thumb img,
+    .model-card:hover .card-thumb img {
+      transform: scale(1.1);
     }
 
     .card-thumb-label {
@@ -759,14 +842,22 @@
     .field,
     .textarea {
       width: 100%;
-      border: 1px solid #d6d6d6;
-      background: transparent;
-      border-radius: 4px;
-      padding: 16px 18px;
-      font-family: Arial, Helvetica, sans-serif;
+      border: 1px solid var(--glass-border);
+      background: var(--card);
+      border-radius: var(--radius-md);
+      padding: 18px 22px;
+      font-family: 'Inter', sans-serif;
       font-size: 1rem;
-      color: #111;
+      color: var(--text);
       outline: none;
+      transition: all 0.3s ease;
+    }
+
+    .field:focus,
+    .textarea:focus {
+      border-color: var(--accent);
+      background: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 0 15px var(--accent-glow);
     }
 
     .textarea {
@@ -783,18 +874,31 @@
     .back-link {
       display: inline-flex;
       align-items: center;
-      gap: 8px;
-      margin: 8px 0 18px;
-      font-family: Arial, Helvetica, sans-serif;
-      color: #666;
-      font-size: .82rem;
+      gap: 12px;
+      margin: 10px 0 32px;
+      font-family: 'Outfit', sans-serif;
+      color: #111;
+      font-size: 1rem;
+      font-weight: 700;
+      text-decoration: none;
+      padding: 10px 20px;
+      border: 1px solid #eee;
+      border-radius: 30px;
+      background: #fafafa;
+      transition: all 0.3s ease;
+    }
+
+    .back-link:hover {
+      background: #fff;
+      transform: translateX(-5px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.05);
     }
 
     .detail-grid {
       display: grid;
-      grid-template-columns: .95fr 1.05fr;
-      gap: 46px;
-      align-items: center;
+      grid-template-columns: 1fr 1.1fr;
+      gap: 60px;
+      align-items: flex-start;
     }
 
     .detail-title {
@@ -811,8 +915,25 @@
 
     .detail-actions {
       display: grid;
-      gap: 10px;
-      max-width: 430px;
+      gap: 12px;
+      margin-top: 32px;
+    }
+
+    .btn-dark {
+      background: #000;
+      color: #fff;
+    }
+
+    .btn-light {
+      background: #f8f8f8;
+      border: 1px solid #eee;
+      color: #222;
+    }
+
+    .btn-outline-dark {
+      background: transparent;
+      border: 1px solid #333;
+      color: #333;
     }
 
     .detail-gallery {
@@ -887,56 +1008,62 @@
     }
 
     .site-footer {
-      background: #000;
-      color: #fff;
-      padding: 44px 0 18px;
-      border-top: 1px solid rgba(255, 255, 255, .08);
+      background: var(--black);
+      color: var(--white);
+      padding: 100px 0 40px;
+      border-top: 1px solid var(--glass-border);
     }
 
     .footer-grid {
       display: grid;
-      grid-template-columns: 1.1fr .9fr 1fr;
-      gap: 34px;
-      align-items: start;
+      grid-template-columns: 1.5fr 1fr 1fr;
+      gap: 60px;
     }
 
-    .footer-brand p,
-    .footer-links a,
-    .footer-social a,
-    .footer-contact-link,
-    .footer-contact-text {
-      font-family: Arial, Helvetica, sans-serif;
-      color: #d1d1d1;
-      line-height: 1.7;
-      font-size: .92rem;
+    .footer-brand p {
+      margin-top: 20px;
+      color: var(--text-muted);
+      line-height: 1.6;
     }
 
     .footer-title {
-      margin: 0 0 14px;
+      font-family: 'Outfit', sans-serif;
       font-size: 1.1rem;
-    }
-
-    .footer-links,
-    .footer-social {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-
-    .footer-links {
-      align-items: flex-start;
-      text-align: left;
+      font-weight: 700;
+      margin-bottom: 24px;
+      color: var(--white);
     }
 
     .footer-links a,
-    .footer-social a {
-      transition: .18s ease;
+    .footer-social-link {
+      display: block;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      transition: color 0.3s ease;
     }
 
     .footer-links a:hover,
-    .footer-social a:hover,
-    .footer-contact-link:hover {
-      color: #fff;
+    .footer-social-link:hover {
+      color: var(--white);
+    }
+
+    .footer-bottom {
+      margin-top: 80px;
+      padding-top: 40px;
+      border-top: 1px solid var(--glass-border);
+      text-align: center;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-bottom-line {
+      height: 1px;
+      background: var(--glass-border);
+      flex: 1;
+      margin: 0 20px;
     }
 
     .footer-contact {
@@ -1131,6 +1258,10 @@
 </head>
 
 <body>
+  <div class="aurora">
+    <div class="aurora-blur"></div>
+    <div class="aurora-blur" style="right: -10%; bottom: -10%; animation-delay: -5s; background: var(--primary-gradient); opacity: 0.1;"></div>
+  </div>
   <div id="particles-js"></div>
   <header class="site-header">
     <div class="container header-inner">
@@ -1280,7 +1411,7 @@
       </section>
       <section class="white-section" style="padding-top:36px">
         <div class="container">
-          <a href="#" class="back-link" id="backToCategory">← Voltar</a>
+          <a href="#" class="back-link" id="backToCategory">‹ Voltar para categorias</a>
           <div class="cards-grid" id="modelGrid"></div>
         </div>
       </section>
@@ -1304,11 +1435,9 @@
               <h1 class="detail-title" id="detailTitle"></h1>
               <div class="detail-copy" id="detailDescription"></div>
               <div class="detail-actions">
-                <a class="btn btn-dark" id="detailQuoteBtn" target="_blank" rel="noopener noreferrer">Solicitar
-                  orçamento</a>
-                <a class="btn btn-light" id="detailViewBtn" target="_blank" rel="noopener noreferrer">Visualizar
-                  site</a>
-                <button class="btn btn-outline-dark" id="detailAltBtn" type="button">Olhar outras opções</button>
+                <a class="btn btn-dark" id="detailQuoteBtn" target="_blank" rel="noopener noreferrer">Solicitar orçamento</a>
+                <a class="btn btn-light" id="detailViewBtn" target="_blank" rel="noopener noreferrer">Ver demonstração <span>↗</span></a>
+                <a href="#" class="back-link" style="margin: 20px 0 0; background: none; border: none; padding: 0;" id="detailAltBtn">‹ Outras opções</a>
               </div>
             </div>
           </div>
@@ -1371,9 +1500,8 @@
   <footer class="site-footer">
     <div class="container footer-grid">
       <div class="footer-brand">
-        <div class="logo" style="font-size:1.55rem">Lanne.pro</div>
-        <p>Criamos sites profissionais que transformam sua presença digital. Amy &amp; Carol, duas irmãs unidas pela
-          paixão em criar.</p>
+        <div class="logo" style="font-size:1.55rem; color: var(--white);">Lanne.pro</div>
+        <p>Transformamos sua presença digital com sites que respiram profissionalismo e elegância. Amy &amp; Carol — Unindo paixão e tecnologia.</p>
       </div>
       <div>
         <h3 class="footer-title">Navegação</h3>
@@ -1385,66 +1513,40 @@
         </div>
       </div>
       <div>
-        <h3 class="footer-title">Contato</h3>
-        <div class="footer-contact">
-          <div class="footer-contact-item">
-            <div class="footer-contact-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24">
-                <path
-                  d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1.9.3 1.8.7 2.6a2 2 0 0 1-.5 2.1l-1.2 1.2a16 16 0 0 0 6.1 6.1l1.2-1.2a2 2 0 0 1 2.1-.5c.8.4 1.7.6 2.6.7A2 2 0 0 1 22 16.9Z">
-                </path>
-              </svg>
-            </div>
-            <div class="footer-contact-text">
-              <span>Telefone</span><a class="footer-contact-link" id="footerPhoneLink" href="tel:+5521969736017">(21)
-                96973-6017</a>
-            </div>
-          </div>
-          <div class="footer-contact-item">
-            <div class="footer-contact-icon" aria-hidden="true">
-              <svg viewBox="0 0 24 24">
-                <path d="M4 5h16v14H4z"></path>
-                <path d="m4 7 8 6 8-6"></path>
-              </svg>
-            </div>
-            <div class="footer-contact-text">
-              <span>Email</span><a class="footer-contact-link" id="footerEmailLink"
-                href="mailto:contato@lanne.pro">contato@lanne.pro</a>
-            </div>
-          </div>
-        </div>
-        <div class="footer-social">
-          <a id="instagramFooter" href="https://www.instagram.com/lanne.pro" target="_blank"
-            rel="noopener noreferrer">Instagram</a>
-          <a id="whatsappFooter" href="https://wa.me/5521969736017" target="_blank"
-            rel="noopener noreferrer">WhatsApp</a>
-          <a href="#" target="_blank" rel="noopener noreferrer">TikTok</a>
+        <h3 class="footer-title">Conecte-se</h3>
+        <div class="footer-social-grid">
+          <a class="footer-social-link" id="instagramFooter" href="#" target="_blank">Instagram</a>
+          <a class="footer-social-link" id="whatsappFooter" href="#" target="_blank">WhatsApp</a>
+          <a class="footer-social-link" id="tiktokFooter" href="#" target="_blank">TikTok</a>
         </div>
       </div>
     </div>
-    <div class="container footer-bottom">© 2026 Lanne.pro — Todos os direitos reservados.</div>
+    <div class="container footer-bottom">
+      <span>© 2026 Lanne.pro — Excelência Digital</span>
+      <div class="footer-bottom-line"></div>
+    </div>
   </footer>
   <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
   <script>
     particlesJS("particles-js", {
       "particles": {
-        "number": { "value": 70, "density": { "enable": true, "value_area": 800 } },
-        "color": { "value": "#ffffff" },
+        "number": { "value": 50, "density": { "enable": true, "value_area": 1000 } },
+        "color": { "value": "#000000" },
         "shape": { "type": "circle" },
-        "opacity": { "value": 0.4, "random": false },
-        "size": { "value": 2.5, "random": true },
-        "line_linked": { "enable": true, "distance": 160, "color": "#ffffff", "opacity": 0.35, "width": 1 },
-        "move": { "enable": true, "speed": 3.5, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+        "opacity": { "value": 0.05, "random": true },
+        "size": { "value": 2, "random": true },
+        "line_linked": { "enable": true, "distance": 150, "color": "#000000", "opacity": 0.03, "width": 1 },
+        "move": { "enable": true, "speed": 1, "direction": "none", "random": true, "straight": false, "out_mode": "out", "bounce": false }
       },
       "interactivity": {
         "detect_on": "canvas",
         "events": {
-          "onhover": { "enable": true, "mode": "grab" },
+          "onhover": { "enable": true, "mode": "bubble" },
           "onclick": { "enable": true, "mode": "push" },
           "resize": true
         },
         "modes": {
-          "grab": { "distance": 160, "line_linked": { "opacity": 1 } },
+          "bubble": { "distance": 200, "size": 4, "duration": 2, "opacity": 0.5, "speed": 3 },
           "push": { "particles_nb": 4 }
         }
       },
@@ -1453,6 +1555,7 @@
     const CONFIG = {
       instagram: 'https://www.instagram.com/lanne.pro',
       whatsapp: 'https://wa.me/5521969736017',
+      tiktok: 'https://www.tiktok.com/@lanne.pro',
       phoneLabel: '(21) 96973-6017',
       email: 'lanne.pro2@gmail.com',
       defaultPreviewSite: 'https://seu-site-exemplo.com'
@@ -1467,8 +1570,8 @@
       custom: {
         psicologia: {
           title: 'Psicologia',
-          image: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/647060831_1532464545261305_6240195086791209154_n.png?stp=dst-png_s843x403&_nc_cat=104&ccb=1-7&_nc_sid=0024fc&_nc_ohc=ntZ-4l5CqNcQ7kNvwFKCmyG&_nc_oc=AdrpIVimB4UNevrVbSYC-4U6174DiiSy7lnNB7vu3FtTUjq9PAt89ocKeJy_QaNrKVlTfwFqoiJZMoO_9X3-LukQ&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEV9qbtlTScISJNXok61_aQ294bTa09aljYPTt0TOqTbQ&oe=69F46585',
-          description: 'Modelos sensíveis, acolhedores e profissionais para destacar sua atuação com elegância.',
+          image: 'C:\\Users\\kamylly\\.gemini\\antigravity\\brain\\59b33f59-446e-4067-a147-2d8f0c511e06\\psychology_website_mockup_1775223055428.png',
+          description: 'Modelos acolhedores e profissionais projetados para transmitir confiança e serenidade.',
           models: [
             { id: 'psicologia-serenidade', name: 'Neuropsy Saúde | Clinica Neuropsicológica', short: 'Visual leve e acolhedor para psicólogas.', long: 'Um site elegante e acolhedor, perfeito para psicólogas que desejam transmitir tranquilidade e profissionalismo. Inclui seção de apresentação profissional, especialidades, depoimentos de pacientes e formulário de contato.', siteUrl: 'https://amybelloy.github.io/neuropsy-saude/ ', previewImage: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/647060831_1532464545261305_6240195086791209154_n.png?stp=dst-png_s843x403&_nc_cat=104&ccb=1-7&_nc_sid=0024fc&_nc_ohc=ntZ-4l5CqNcQ7kNvwFKCmyG&_nc_oc=AdrpIVimB4UNevrVbSYC-4U6174DiiSy7lnNB7vu3FtTUjq9PAt89ocKeJy_QaNrKVlTfwFqoiJZMoO_9X3-LukQ&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEV9qbtlTScISJNXok61_aQ294bTa09aljYPTt0TOqTbQ&oe=69F46585', galleryImages: ['https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/658897639_2124390881659457_7147809031739594221_n.png?stp=dst-png_s843x403&_nc_cat=111&ccb=1-7&_nc_sid=0024fc&_nc_ohc=54FYXl2hp9QQ7kNvwEluT0H&_nc_oc=Adpa6Y54WVTQOaTzkIWluRGgl11iQaUpN7jLKSkYZGpF5e3CHz-iWvkq9r9sq5jm0-4JqM-McpeWgD5ruH4sYza4&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AFvXEgFI1VDazk3PbEHU1rMiJ-Gda04_Gtfe7I_gdcSzQ&oe=69F46764', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/656924080_4180196558906209_4441174656164308419_n.png?stp=dst-png_s526x395&_nc_cat=109&ccb=1-7&_nc_sid=0024fc&_nc_ohc=lSzE7Ny7FesQ7kNvwEHFRtc&_nc_oc=AdoC_5KC4q0BcFiytsEeujzOmkwaYGObAVbj7evOqHSjDCKVj5SnJg_RiIAGGva4cHJSBG8cdlcnXCn9xq6WAqca&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AE6tW75R6juOzUz1gtuT_FmZnKsTiadT2pKIN8tGbhe_A&oe=69F464CA', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/598061198_1480344283724462_897387539385843564_n.png?stp=dst-png_s480x480&_nc_cat=105&ccb=1-7&_nc_sid=0024fc&_nc_ohc=SnmsyQ5Y_nIQ7kNvwE83MT9&_nc_oc=AdqCRIqoLArAbSAght5sTtIAb2NWsjAzGVFHsfHzJDkDMmLqby27pI0QQAs6-DIIIwRTGKdpBmYXaRe0j1OBiEAM&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AFIz3wkBJ_LGDXFLKbkTofk373AvRetbowqRj_iVURrmg&oe=69F46A68'], slides: ['Início Neuropsy', 'Avaliação Neuropsicológica', 'Nossos Serviços'] },
             { id: 'psicologia-acolhimento', name: 'Michelle Aquino | Psicóloga', short: 'Comunicação humana com presença delicada.', long: 'Ideal para profissionais que desejam uma comunicação mais próxima e empática. Layout com foco em história, método de trabalho, áreas de atendimento e destaque para agendamento.', siteUrl: 'https://carolyneraquel26-sketch.github.io/Michelle-Aquino/', previewImage: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/662364891_2413611732438668_3280222727851557054_n.png?stp=dst-png_s552x414&_nc_cat=102&ccb=1-7&_nc_sid=0024fc&_nc_ohc=Ad00h_Q2JdsQ7kNvwF8qyGX&_nc_oc=Adrx4jsT0yfCWZVnDYeAdUbCA7aM0JQ-Z8hGVsV88e2sER5Or597UYTxsifB8C5jx5VZ-hnhCmOVhw64vI5I6jkc&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEqMN7Skv-Nicl7cW13fIJUa8qG7msVpXo4mOksJ_I41g&oe=69F45E0C', galleryImages: ['https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/662364891_2413611732438668_3280222727851557054_n.png?_nc_cat=102&ccb=1-7&_nc_sid=0024fc&_nc_ohc=Ad00h_Q2JdsQ7kNvwF8qyGX&_nc_oc=Adrx4jsT0yfCWZVnDYeAdUbCA7aM0JQ-Z8hGVsV88e2sER5Or597UYTxsifB8C5jx5VZ-hnhCmOVhw64vI5I6jkc&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AGUsIYz--dfiiQvZvgLq1GStEu_kHQYwz5VO9w7xnQHIw&oe=69F4964C', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/661797708_940706728684043_4658948711537350437_n.png?stp=dst-png_s600x600&_nc_cat=105&ccb=1-7&_nc_sid=0024fc&_nc_ohc=7z8GHav3R_EQ7kNvwHxJ8eo&_nc_oc=AdrRw3ZtBnU8Qa_YzkE1QV0zaQiMINY-eX8rrIz1yHzwAC4WtnshqfCKM_8ToIQD4JbAQp22zT4tR4BvzYe-gpY0&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AHvwBX4hx_jkQ7QvIA13kvpEMBdVeNwb27CW47gRPDEDw&oe=69F4802C', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/662368764_1580183633063166_557539146382111707_n.png?stp=dst-png_s526x395&_nc_cat=111&ccb=1-7&_nc_sid=0024fc&_nc_ohc=EcRh-gyBVA8Q7kNvwEtnjDx&_nc_oc=AdqB5AznQXqurqXQzTkvfvSp72n8X6fKNUHmO8_Bk27wQVfnRxFRqlhG2WYKDbX8Z8ubYnF8p5mgORznvZ_5C3_n&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEIyNkRXF1kPeW6MD47cIvj8qX0V6kIt9BwSfcmd6eIrQ&oe=69F4800B'], slides: ['Banner principal do modelo Acolhimento', 'Seção sobre a profissional', 'Página de serviços e agendamento'] },
@@ -1477,17 +1580,17 @@
         },
         psiquiatria: {
           title: 'Psiquiatria',
-          image: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/655636888_1291098539617738_9058214911184221712_n.png?stp=dst-png_s843x403&_nc_cat=108&ccb=1-7&_nc_sid=0024fc&_nc_ohc=jP33dLl83SAQ7kNvwH5F4qU&_nc_oc=Adqbk2jEDm4Tm11oCCbFe2SWvJZVcCiZ-wzw-Yq8Rx0VbvKt9noMuonVRMU2jyK9Z3aLwKpTpnr6EDiCT0SDmDyN&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEsCZvS-Wyx8WKz-NoapinwH-8nUzQZjlELTaccp94nTQ&oe=69F489B1',
-          description: 'Sites sofisticados e confiáveis para psiquiatras e clínicas que querem reforçar credibilidade.',
+          image: 'C:\\Users\\kamylly\\.gemini\\antigravity\\brain\\59b33f59-446e-4067-a147-2d8f0c511e06\\psychology_website_mockup_1775223055428.png',
+          description: 'Estética clínica impecável que reforça sua autoridade e cuidado com o paciente.',
           models: [
             { id: 'psiquiatria-equilibrio', name: 'Modelo Equilíbrio', short: 'Presença forte e profissional.', long: 'Modelo ideal para psiquiatras que desejam comunicar seriedade e acolhimento. Estrutura com currículo, especialidades, perguntas frequentes e canal de contato.', siteUrl: 'https://amybelloy.github.io/Dra.-Ana-Beatriz-Psquiatra/', previewImage: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/655636888_1291098539617738_9058214911184221712_n.png?stp=dst-png_s843x403&_nc_cat=108&ccb=1-7&_nc_sid=0024fc&_nc_ohc=jP33dLl83SAQ7kNvwH5F4qU&_nc_oc=Adqbk2jEDm4Tm11oCCbFe2SWvJZVcCiZ-wzw-Yq8Rx0VbvKt9noMuonVRMU2jyK9Z3aLwKpTpnr6EDiCT0SDmDyN&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEsCZvS-Wyx8WKz-NoapinwH-8nUzQZjlELTaccp94nTQ&oe=69F489B1', galleryImages: ['https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/655636888_1291098539617738_9058214911184221712_n.png?stp=dst-png_s843x403&_nc_cat=108&ccb=1-7&_nc_sid=0024fc&_nc_ohc=jP33dLl83SAQ7kNvwH5F4qU&_nc_oc=Adqbk2jEDm4Tm11oCCbFe2SWvJZVcCiZ-wzw-Yq8Rx0VbvKt9noMuonVRMU2jyK9Z3aLwKpTpnr6EDiCT0SDmDyN&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEsCZvS-Wyx8WKz-NoapinwH-8nUzQZjlELTaccp94nTQ&oe=69F489B1', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/655943994_1486860602815295_2911007672885756563_n.png?stp=dst-png_s480x480&_nc_cat=103&ccb=1-7&_nc_sid=0024fc&_nc_ohc=jNf5oSl8VjkQ7kNvwEoJsV3&_nc_oc=AdrZo_puSn_Jh2FSa4JZvmdvgKsHhJcstBxua1a0hE5tP9bXCQeDbxPklyuAlb4pXJ8gqxzW7kj8cfd2KTMoqodP&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AE_Xk1NpClEGkeNWgRO8siXD9Gd78XSPdcZJYRHl7YA8g&oe=69F484AB', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/656047675_2505413269958059_7106452064104031609_n.png?stp=dst-png_s526x395&_nc_cat=105&ccb=1-7&_nc_sid=0024fc&_nc_ohc=Yu7H0o9lSzUQ7kNvwHMi-Wo&_nc_oc=AdosuQFB0LkUMRsw8DyxRMVmEaztJ5_DHcpYVCTdx6uMusV3UdV76UQz4EOFU3f4-xWXEzu9mY4QXUG5FmzHpHuT&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AHGRH4hg7JXGjQBNkmenWvw1P3qehzPQgg-rXo9xtvN2A&oe=69F4B748', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/659779723_987454347276986_113748876753375041_n.png?stp=dst-png_s640x640&_nc_cat=110&ccb=1-7&_nc_sid=0024fc&_nc_ohc=l3sCTW427OoQ7kNvwHUr_tp&_nc_oc=AdrVO4oM-5SoMwTq08Fwo6eSaZXxzdvEvJgDit8jVizN0hNasiP_0fDdjeSWmhYRWW931bGGhL_LUjbAC2UIWJgS&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AH9jGHwG8wXwUw69kewlthv5Og6aDwW8rOaytkWZs54PQ&oe=69F4910B'], slides: ['Home Equilíbrio', 'Especialidades médicas', 'Contato com CTA'] },
             { id: 'psiquiatria-essencia', name: 'Modelo Essência', short: 'Design suave com foco institucional.', long: 'Layout limpo para clínicas e atendimento particular, com destaque para diferenciais, equipe e facilidade no contato.', siteUrl: 'https://seu-site-exemplo.com/psiquiatria-essencia', previewImage: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/656995159_922785930661941_3876920035250329738_n.png?stp=dst-png_s720x720&_nc_cat=108&ccb=1-7&_nc_sid=0024fc&_nc_ohc=77Yme_o9dsMQ7kNvwE7lHgi&_nc_oc=AdpwEKGAgSOyHMpGde4GVUaZpj1G5wZiFIw-k_ZEo6E6Pquv4QN1s2y9I1-wH4MOv7poBDVlhdleBhjQ4QV0em8O&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AF25yTaUvDBS-UqCUqbOw60Ey5YWt4ytTBFEgYNbv4ACg&oe=69F4ADE6', galleryImages: ['https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/656995159_922785930661941_3876920035250329738_n.png?stp=dst-png_s720x720&_nc_cat=108&ccb=1-7&_nc_sid=0024fc&_nc_ohc=77Yme_o9dsMQ7kNvwE7lHgi&_nc_oc=AdpwEKGAgSOyHMpGde4GVUaZpj1G5wZiFIw-k_ZEo6E6Pquv4QN1s2y9I1-wH4MOv7poBDVlhdleBhjQ4QV0em8O&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AF25yTaUvDBS-UqCUqbOw60Ey5YWt4ytTBFEgYNbv4ACg&oe=69F4ADE6', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/659779723_987454347276986_113748876753375041_n.png?stp=dst-png_s640x640&_nc_cat=110&ccb=1-7&_nc_sid=0024fc&_nc_ohc=l3sCTW427OoQ7kNvwHUr_tp&_nc_oc=AdrVO4oM-5SoMwTq08Fwo6eSaZXxzdvEvJgDit8jVizN0hNasiP_0fDdjeSWmhYRWW931bGGhL_LUjbAC2UIWJgS&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AH9jGHwG8wXwUw69kewlthv5Og6aDwW8rOaytkWZs54PQ&oe=69F4910B', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/661640094_1487617106050954_3347727755273747553_n.png?stp=dst-png_s526x395&_nc_cat=107&ccb=1-7&_nc_sid=0024fc&_nc_ohc=voF1SBfg5xgQ7kNvwGOHpdj&_nc_oc=Adok3jKAhOf23e2JBfwU-92mQxVWbwNXhqzQIFwojIi1r8nS8qaS8PPkwVnfKeq7zpIw2YLu9Q5DYMxrqQeVUqSe&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AE1oeHbXB9gP4dM0KOf8BNuSZakFyyEPJeGsv7PRCMJqw&oe=69F4A8DF'], slides: ['Home Essência', 'Equipe e diferenciais', 'Contato institucional'] }
           ]
         },
         pizzaria: {
-          title: 'Pizzaria',
-          image: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/654674195_1700571881109575_7135777924356294897_n.png?stp=dst-png_p394x394&_nc_cat=107&ccb=1-7&_nc_sid=0024fc&_nc_ohc=iBIDsbM66JsQ7kNvwFQX3YQ&_nc_oc=Adq7rkBZdT6e4zBLcXvclLHBqcH-xs4eOeIgrQmet8GFmtgwvcEPkTcLkST66u51amf75fhb82AnVsQX2ejf4lDU&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AFGquUrxpuxQe4wPqovwz-gqI0yCxEyAY8ee6ez7fQyQA&oe=69F4B241',
-          description: 'Modelos visuais irresistíveis para delivery e restaurantes com cardápio dinâmico.',
+          title: 'Gastronomia',
+          image: 'C:\\Users\\kamylly\\.gemini\\antigravity\\brain\\59b33f59-446e-4067-a147-2d8f0c511e06\\pizza_website_mockup_1775223071705.png',
+          description: 'Layouts vibrantes e irresistíveis feitos para despertar o apetite e impulsionar vendas.',
           models: [
             { id: 'pizzaria-sabor', name: 'Bella Massa', short: 'Visual para delivery.', long: 'Um site com foco no seu cardápio e conversão para delivery via WhatsApp.', siteUrl: 'https://seu-site-exemplo.com/pizzaria', previewImage: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/654674195_1700571881109575_7135777924356294897_n.png?stp=dst-png_p394x394&_nc_cat=107&ccb=1-7&_nc_sid=0024fc&_nc_ohc=iBIDsbM66JsQ7kNvwFQX3YQ&_nc_oc=Adq7rkBZdT6e4zBLcXvclLHBqcH-xs4eOeIgrQmet8GFmtgwvcEPkTcLkST66u51amf75fhb82AnVsQX2ejf4lDU&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AFGquUrxpuxQe4wPqovwz-gqI0yCxEyAY8ee6ez7fQyQA&oe=69F4B241', galleryImages: ['https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/654674195_1700571881109575_7135777924356294897_n.png?stp=dst-png_p394x394&_nc_cat=107&ccb=1-7&_nc_sid=0024fc&_nc_ohc=XcIkLtqMYj8Q7kNvwFaIgYp&_nc_oc=AdosEGkXGKxmW3DdjPk0XNtOC967Ieuym5TIoByBud6omp5l7QHHDO6gUf2BVTr2e2TAphhmrPadDZ-bFDE0i8QG&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD4wH_i8Q4906yIztwVq7Shqj9jkIzNFIU6dSbgEXSCSSRqg&oe=69EFDCC1', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/655939119_1445111677365422_9139856225601166301_n.png?stp=dst-png_s590x590&_nc_cat=108&ccb=1-7&_nc_sid=0024fc&_nc_ohc=_pU4fnHEXycQ7kNvwEupP5l&_nc_oc=Adon7GzuVjroOXrSONGh41856PAp-AFcENZ2MvYa-f3BJbDJT7F4foua8r4-wcg3Lbi3TOuQnead0_G-AlMOEJsS&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD4wHGA7MWkq5h26XaiVJkI39BgSmSIh0tDz7eOXMR32R8kA&oe=69EFC5E2', 'https://instagram.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/597424224_1506016887561496_5719278641120165983_n.png?stp=dst-png_s565x565&_nc_cat=108&ccb=7-5&_nc_sid=0024fc&_nc_ohc=R34aa8dXw-gQ7kNvwGO46aJ&_nc_oc=AdpN-g9FwyZoNvBR-E-x6N5RLUCvTxPCGIH2NnbG7mLPqV0fab1aWV05p8S27mOgTj0hBZIngOHsP4Y5tclXqRWz&_nc_zt=23&_nc_ht=instagram.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD4wFOO3JdqesZ3vujxhvz-mQLt2RyLexK21RNLH4lo74Yjw&oe=69EFD15A'], slides: ['Início Bella Massa', 'Cardápio', 'Delivery'] },
             { id: 'pizzaria-variedade', name: 'Doces e Trufas', short: 'Foco em diversidade.', long: 'Um modelo versátil para docerias com grande variedade de sabores e promoções combinadas.', siteUrl: 'https://amybelloy.github.io/DOCES-TRUFADOS/', previewImage: 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/658072392_1632882431233557_5102120227390839163_n.png?stp=dst-png_p394x394&_nc_cat=105&ccb=1-7&_nc_sid=0024fc&_nc_ohc=fQZXLo9yclkQ7kNvwH0FWxD&_nc_oc=Ado2hFcbtom7hGHL_LwCD6k-n0zIE9aAHGaBD9X0uSSqmRe95dxMfIuhOURErF0vl7e_E6yrVqhNPRaY2EWsALUb&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEJg4eB6_lnjZ6tJnf6qc1TDxcixZOF6KMbtpRD5mVT4w&oe=69F4D66C', galleryImages: ['https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/658072392_1632882431233557_5102120227390839163_n.png?stp=dst-png_p394x394&_nc_cat=105&ccb=1-7&_nc_sid=0024fc&_nc_ohc=fQZXLo9yclkQ7kNvwH0FWxD&_nc_oc=Ado2hFcbtom7hGHL_LwCD6k-n0zIE9aAHGaBD9X0uSSqmRe95dxMfIuhOURErF0vl7e_E6yrVqhNPRaY2EWsALUb&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AEJg4eB6_lnjZ6tJnf6qc1TDxcixZOF6KMbtpRD5mVT4w&oe=69F4D66C', 'https://scontent.fsdu9-1.fna.fbcdn.net/v/t1.15752-9/660405934_1574265143642825_8645925166271046749_n.png?stp=dst-png_s600x600&_nc_cat=102&ccb=1-7&_nc_sid=0024fc&_nc_ohc=c8BD1EBYZtIQ7kNvwFwcv1Y&_nc_oc=AdrRcbV6VHJPOkUeuWNeqJxGhbWEKoYZSkiSWrdQmGS4W5sMpOCJaSLxOmfnFGlpfWhE0Qo7YdREsqChFG1Ul0ob&_nc_ad=z-m&_nc_cid=0&_nc_zt=23&_nc_ht=scontent.fsdu9-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AG5kBMs0Dc3OgYMsdhTGXP9CJGsJ8NSIteZAhXTHr_ImQ&oe=69F4BAA0', ' https://scontent.fsdu4-1.fna.fbcdn.net/v/t1.15752-9/656826625_2842323246144597_1003265164433623505_n.png?stp=dst-png_s526x395&_nc_cat=104&ccb=1-7&_nc_sid=0024fc&_nc_ohc=FKLh11TFxLgQ7kNvwGiijpX&_nc_oc=AdoVN2rX-YYgot865xZ8-ciT79exEhTBz9ut3DImiF-CGLjvoFARpAZRCmfOSAVuPI17fCFmuSLjlahKpL1jeV61&_nc_ad=z-m&_nc_cid=1295&_nc_zt=23&_nc_ht=scontent.fsdu4-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AF9mwp2GeaXDHQRe8s_t8tt89C8ZkAnKQNbiOnR2zwZ3Q&oe=69F6A483', 'https://scontent.fsdu15-1.fna.fbcdn.net/v/t1.15752-9/661022808_1429268845097130_8852310731490057224_n.png?stp=dst-png_s640x640&_nc_cat=106&ccb=1-7&_nc_sid=0024fc&_nc_ohc=smMyaVa5EBkQ7kNvwGf1pRz&_nc_oc=AdonBIg8XeeHyLfj7ZrxemJvwRI9iEkaC56LWYlgQnxYQGGp-_3QvDZHZjxAvY12k-6D_12M6PCYllF9-KK4tfkU&_nc_ad=z-m&_nc_cid=1295&_nc_zt=23&_nc_ht=scontent.fsdu15-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AE64oo7rbuAjul4grvtjrgHcJ2M34DHVXrVi_WPZJT_hw&oe=69F6C4A1'], slides: ['Nossas Trufas', 'Cardápio Completo'] },
@@ -1495,30 +1598,28 @@
           ]
         },
         barbearia: {
-          title: 'Imobiliária ',
-          image: 'https://scontent.fsdu15-1.fna.fbcdn.net/v/t1.15752-9/658409252_4197624000383715_6365697324927949704_n.png?stp=dst-png_s843x403&_nc_cat=100&ccb=1-7&_nc_sid=0024fc&_nc_ohc=y70Vk0jBMQMQ7kNvwHfUoGL&_nc_oc=Ado70wZYlcHy6LOzFoU9DyBBjZw0PYfE7yjnu7nmLnWViUQBa8a9Rk35k64Wg31kNmUF5DEu-m2wsItMHDArxTAU&_nc_ad=z-m&_nc_cid=1295&_nc_zt=23&_nc_ht=scontent.fsdu15-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AGOJiLnzzBoPDPfhfgJA0kT7pO_qZjsyM6CMRuMTwH_bA&oe=69F6C96D',
-          description: 'Identidade forte e moderna para profissionais de estilo.',
+          title: 'Imobiliária & Negócios',
+          image: 'C:\\Users\\kamylly\\.gemini\\antigravity\\brain\\59b33f59-446e-4067-a147-2d8f0c511e06\\real_estate_website_mockup_1775223125281.png',
+          description: 'Presença digital estratégica para consultores e imobiliárias que buscam converter leads.',
           models: [
-            { id: 'Imobiliária-clássica', name: 'Imobiliária Clássica', short: 'Identidade forte.', long: 'Perfeito para barbearias que buscam presença marcante na internet.', siteUrl: 'https://amybelloy.github.io/Monteiro./', previewImage: 'https://scontent.fsdu15-1.fna.fbcdn.net/v/t1.15752-9/658409252_4197624000383715_6365697324927949704_n.png?stp=dst-png_s843x403&_nc_cat=100&ccb=1-7&_nc_sid=0024fc&_nc_ohc=y70Vk0jBMQMQ7kNvwHfUoGL&_nc_oc=Ado70wZYlcHy6LOzFoU9DyBBjZw0PYfE7yjnu7nmLnWViUQBa8a9Rk35k64Wg31kNmUF5DEu-m2wsItMHDArxTAU&_nc_ad=z-m&_nc_cid=1295&_nc_zt=23&_nc_ht=scontent.fsdu15-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AGOJiLnzzBoPDPfhfgJA0kT7pO_qZjsyM6CMRuMTwH_bA&oe=69F6C96D', galleryImages: ['https://scontent.fsdu15-1.fna.fbcdn.net/v/t1.15752-9/658409252_4197624000383715_6365697324927949704_n.png?stp=dst-png_s843x403&_nc_cat=100&ccb=1-7&_nc_sid=0024fc&_nc_ohc=y70Vk0jBMQMQ7kNvwHfUoGL&_nc_oc=Ado70wZYlcHy6LOzFoU9DyBBjZw0PYfE7yjnu7nmLnWViUQBa8a9Rk35k64Wg31kNmUF5DEu-m2wsItMHDArxTAU&_nc_ad=z-m&_nc_cid=1295&_nc_zt=23&_nc_ht=scontent.fsdu15-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AGOJiLnzzBoPDPfhfgJA0kT7pO_qZjsyM6CMRuMTwH_bA&oe=69F6C96D','https://scontent.fsdu4-1.fna.fbcdn.net/v/t1.15752-9/657402261_1328447235780405_6016602130896665534_n.png?stp=dst-png_s480x480&_nc_cat=101&ccb=1-7&_nc_sid=0024fc&_nc_ohc=xxr99I8iBd8Q7kNvwFgvHIv&_nc_oc=Adq-Oet0dziR0kTHGi6UYnqYrcjF_xJQzw8R-Mhw0ACh_wixGCZdFlcG6wSS9RurOVmgY9dx2VKyuoY8Lbeq7mRV&_nc_ad=z-m&_nc_cid=1295&_nc_zt=23&_nc_ht=scontent.fsdu4-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AHzZSDp0jy5YvY7dSLCNVvUzVbhJfM5j_arfU8jdTzDyA&oe=69F6D0EE', 'https://scontent.fsdu15-1.fna.fbcdn.net/v/t1.15752-9/661431925_1253770223392038_5740263400877577605_n.png?stp=dst-png_s720x720&_nc_cat=109&ccb=1-7&_nc_sid=0024fc&_nc_ohc=ijY3RSm6l1AQ7kNvwHPqGvD&_nc_oc=AdrSgeTDQLPRI-v1T9nZ84hL8rBmnL8vx7bTJ3n2oAwW_1NcHX1q5oalSNNqtnVqEp7kIRyWOcqGb58JAj2xLYfM&_nc_ad=z-m&_nc_cid=1295&_nc_zt=23&_nc_ht=scontent.fsdu15-1.fna&_nc_ss=7a32e&oh=03_Q7cD5AF-b2XXEIYCARhu3RxVAVmTHyn3wE0gq7Prs9T3oBZ21A&oe=69F6AAAA'], slides: ['Início Barbearia', 'Nossos Serviços'] }
+            { id: 'Imobiliária-clássica', name: 'Imobiliária Monteiro', short: 'Identidade forte e confiável.', long: 'Perfeito para imobiliárias que buscam uma presença marcante e profissional na internet.', siteUrl: 'https://amybelloy.github.io/Monteiro./', previewImage: 'C:\\Users\\kamylly\\.gemini\\antigravity\\brain\\59b33f59-446e-4067-a147-2d8f0c511e06\\real_estate_website_mockup_1775223125281.png' }
           ]
         },
         spa: {
           title: 'Spa & Wellness',
-          description: 'Leveza e sofisticação para clínicas de estética e bem-estar.',
+          image: 'C:\\Users\\kamylly\\.gemini\\antigravity\\brain\\59b33f59-446e-4067-a147-2d8f0c511e06\\spa_website_mockup_1775223107431.png',
+          description: 'Uma experiência digital relaxante e sofisticada para seu espaço de bem-estar.',
           models: [
             { id: 'spa-bemestar', name: 'Spa Serenity', short: 'Leveza e sofisticação.', long: 'Página ideal para clínicas de estética com visual calmo e agradável.', siteUrl: 'https://seu-site-exemplo.com/spa', slides: ['Início Spa', 'Tratamentos'] }
           ]
         },
         design: {
-          title: 'Design & Social Media',
-          description: 'Artes profissionais para elevar sua presença digital e física.',
+          title: 'Design & Social Media (P&B)',
+          description: 'Artes profissionais em Preto e Branco para elevar sua presença digital com elegância atemporal.',
           models: [
-            { id: 'cartao-visita', name: 'Cartão de Visita', short: 'A primeira impressão é a que fica.', long: 'Arte profissional para seu cartão de visita.', previewImage: 'C:\\Users\\kamylly\\.gemini\\antigravity\\brain\\ef4f2131-c0fe-4e88-b18a-c31bdd13c88c\\business_cards_mockup_1775032932969.png', siteUrl: '#', isDirectRequest: true },
-            { id: 'logomarca', name: 'Logomarca', short: 'Sua identidade visual única.', long: 'Criação de logo e manual de marca.', previewImage: 'C:\\Users\\kamylly\\.gemini\\antigravity\\brain\\ef4f2131-c0fe-4e88-b18a-c31bdd13c88c\\logo_design_process_1775032947656.png', siteUrl: '#', isDirectRequest: true },
-            { id: 'insta-cards', name: 'Posts p/ Instagram', short: 'Artes que engajam seu público.', long: 'Pack de artes personalizadas para feed e stories.', previewImage: 'C:\\Users\\kamylly\\.gemini\\antigravity\\brain\\ef4f2131-c0fe-4e88-b18a-c31bdd13c88c\\instagram_feed_aesthetic_1775032964353.png', siteUrl: '#', isDirectRequest: true },
-            { id: 'insta-gestao', name: 'Gestão de Instagram', short: 'Cuidamos do seu perfil p/ você.', long: 'Planejamento e postagem estratégica.', previewImage: 'C:\\Users\\kamylly\\.gemini\\antigravity\\brain\\ef4f2131-c0fe-4e88-b18a-c31bdd13c88c\\social_media_management_dashboard_1775032979317.png', siteUrl: '#', isDirectRequest: true },
-            { id: 'banner-design', name: 'Banners e Flyers', short: 'Destaque sua oferta.', long: 'Criação de artes para banners físicos e digitais.', previewImage: 'C:\\Users\\kamylly\\.gemini\\antigravity\\brain\\ef4f2131-c0fe-4e88-b18a-c31bdd13c88c\\banner_advertising_design_1775032994948.png', siteUrl: '#', isDirectRequest: true },
-            { id: 'designers', name: 'Design Geral', short: 'Soluções criativas sob medida.', long: 'Serviços especializados de design para seu negócio.', previewImage: 'C:\\Users\\kamylly\\.gemini\\antigravity\\brain\\ef4f2131-c0fe-4e88-b18a-c31bdd13c88c\\graphic_designer_creative_workspace_1775033012422.png', siteUrl: '#', isDirectRequest: true }
+            { id: 'cartao-visita', name: 'Cartão de Visita P&B', short: 'A primeira impressão é a que fica.', long: 'Arte profissional minimalista para seu cartão de visita.', previewImage: 'C:\\Users\\kamylly\\.gemini\\antigravity\\brain\\ef4f2131-c0fe-4e88-b18a-c31bdd13c88c\\business_cards_mockup_1775032932969.png', siteUrl: '#', isDirectRequest: true },
+            { id: 'logomarca', name: 'Logomarca Minimalista', short: 'Sua identidade visual única.', long: 'Criação de logo e manual de marca em alto contraste.', previewImage: 'C:\\Users\\kamylly\\.gemini\\antigravity\\brain\\ef4f2131-c0fe-4e88-b18a-c31bdd13c88c\\logo_design_process_1775032947656.png', siteUrl: '#', isDirectRequest: true },
+            { id: 'insta-cards', name: 'Posts P&B', short: 'Artes que engajam seu público.', long: 'Pack de artes personalizadas para feed e stories em tons de cinza e preto.', previewImage: 'C:\\Users\\kamylly\\.gemini\\antigravity\\brain\\ef4f2131-c0fe-4e88-b18a-c31bdd13c88c\\instagram_feed_aesthetic_1775032964353.png', siteUrl: '#', isDirectRequest: true },
           ]
         }
       }
@@ -1563,9 +1664,12 @@
     function applyConfig() {
       const whatsappLinks = [document.getElementById('whatsappTop'), document.getElementById('whatsappFooter')];
       const instagramLinks = [document.getElementById('instagramTop'), document.getElementById('instagramFooter')];
-      whatsappLinks.forEach(el => el.href = CONFIG.whatsapp || '#');
-      instagramLinks.forEach(el => el.href = CONFIG.instagram);
-      document.getElementById('contactPhone').textContent = CONFIG.phoneLabel;
+      const tiktokFooter = document.getElementById('tiktokFooter');
+      whatsappLinks.forEach(el => { if (el) el.href = CONFIG.whatsapp || '#'; });
+      instagramLinks.forEach(el => { if (el) el.href = CONFIG.instagram || '#'; });
+      if (tiktokFooter) tiktokFooter.href = CONFIG.tiktok || '#';
+      const contactPhone = document.getElementById('contactPhone');
+      if (contactPhone) contactPhone.textContent = CONFIG.phoneLabel;
     }
     function showPage(name) {
       Object.values(routes).forEach(page => page.classList.remove('active'));
@@ -1608,6 +1712,7 @@
       document.getElementById('customCategories').innerHTML = Object.entries(DATA.custom).map(([key, item]) => categoryCardMarkup(item, 'custom', key)).join('');
       document.querySelectorAll('.category-card').forEach(card => card.addEventListener('click', () => openModelList(card.dataset.type, card.dataset.key)));
       observeElements();
+      initTilt();
     }
     function modelCardMarkup(model) {
       const linkText = model.isDirectRequest ? 'Solicitar agora →' : 'Abrir modelo →';
@@ -1634,6 +1739,7 @@
         }
       }));
       observeElements();
+      initTilt();
       showPage('modelList');
     }
     document.getElementById('backToCategory').addEventListener('click', (e) => { e.preventDefault(); openRoute(currentCategoryType); });
@@ -1670,6 +1776,7 @@
       document.getElementById('shopPrev').addEventListener('click', () => wrap.scrollBy({ left: -280, behavior: 'smooth' }));
       document.getElementById('shopNext').addEventListener('click', () => wrap.scrollBy({ left: 280, behavior: 'smooth' }));
       observeElements();
+      initTilt();
     }
     function setupMobileMenu() {
       const menuToggle = document.getElementById('menuToggle');
@@ -1712,6 +1819,78 @@
     function observeElements() {
       document.querySelectorAll('.category-card, .model-card, .shop-card').forEach(el => observer.observe(el));
     }
+
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('.site-header');
+      if (window.scrollY > 50) {
+        header.classList.add('scrolled');
+      } else {
+        header.classList.remove('scrolled');
+      }
+    });
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    function initAnimations() {
+      gsap.from(".hero h1", { opacity: 0, y: 50, duration: 1, ease: "power4.out" });
+      gsap.from(".hero p", { opacity: 0, y: 30, duration: 1, delay: 0.3, ease: "power4.out" });
+      gsap.from(".hero-actions", { opacity: 0, y: 20, duration: 1, delay: 0.5, ease: "power4.out" });
+
+      gsap.utils.toArray(".white-section, .black-section").forEach(section => {
+        const title = section.querySelector(".section-title");
+        if (title) {
+          gsap.from(title, {
+            scrollTrigger: {
+              trigger: section,
+              start: "top 80%",
+              toggleActions: "play none none none"
+            },
+            opacity: 0,
+            y: 30,
+            duration: 0.8
+          });
+        }
+      });
+    }
+
+    function initTilt() {
+      const cards = document.querySelectorAll('.shop-card, .category-card, .model-card');
+      cards.forEach(card => {
+        card.addEventListener('mousemove', e => {
+          const rect = card.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          const centerX = rect.width / 2;
+          const centerY = rect.height / 2;
+          const rotateX = (y - centerY) / 10;
+          const rotateY = (centerX - x) / 10;
+
+          gsap.to(card, {
+            rotateX: rotateX,
+            rotateY: rotateY,
+            scale: 1.05,
+            duration: 0.5,
+            ease: "power2.out",
+            perspective: 1000
+          });
+        });
+
+        card.addEventListener('mouseleave', () => {
+          gsap.to(card, {
+            rotateX: 0,
+            rotateY: 0,
+            scale: 1,
+            duration: 0.5,
+            ease: "power2.out"
+          });
+        });
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      initAnimations();
+      initTilt();
+    });
 
     applyConfig(); renderCategories(); renderHomeShop(); setupContactAction(); setupMobileMenu(); observeElements();
   </script>
