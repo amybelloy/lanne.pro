@@ -250,8 +250,14 @@ section {
 
 .cards-grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
   gap: 30px;
+}
+
+@media (max-width: 1024px) {
+  .cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
 }
 
 @media (max-width: 768px) {
@@ -261,8 +267,22 @@ section {
   }
 }
 
+.card {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .card-content {
   padding: 24px;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+}
+
+.card-text {
+  flex-grow: 1;
+  margin-bottom: 20px;
 }
 
 .card-title {
@@ -452,24 +472,18 @@ footer {
 
     /* Page Hero Mobile */
     .page-hero {
-        padding: 100px 16px 40px !important;
-        min-height: 60vh !important;
+        padding: 80px 16px 40px !important;
+        min-height: auto !important;
         display: flex;
         flex-direction: column;
         justify-content: center;
         text-align: center;
         position: relative;
+        background: #fff !important;
     }
 
     .page-hero::before {
-        content: '';
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0,0,0,0.4);
-        z-index: 1;
+        display: none;
     }
 
     .page-hero .container {
@@ -481,14 +495,50 @@ footer {
         font-size: 2rem !important;
         margin-bottom: 15px;
         line-height: 1.1;
+        overflow-wrap: break-word;
+        hyphens: auto;
     }
 
     .section-header h2 {
         font-size: 1.8rem;
+        overflow-wrap: break-word;
+        hyphens: auto;
     }
 
     h2 {
         font-size: 1.8rem !important;
+        overflow-wrap: break-word;
+        hyphens: auto;
+    }
+
+    /* Extra small devices polish */
+    @media (max-width: 480px) {
+        .container {
+            padding: 0 15px !important;
+        }
+        .page-hero h1 {
+            font-size: 1.7rem !important;
+        }
+        h2 {
+            font-size: 1.5rem !important;
+        }
+        .hero-actions .btn {
+            width: 100%;
+        }
+    }
+
+    @media (max-width: 360px) {
+        .page-hero h1 {
+            font-size: 1.5rem !important;
+        }
+        .header-container {
+            flex-direction: column;
+            gap: 10px;
+        }
+        .header-actions {
+            width: 100%;
+            justify-content: center;
+        }
     }
 
     .hero-image {
