@@ -50,6 +50,8 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: -0.02em;
+  overflow-wrap: break-word;
+  hyphens: auto;
 }
 
 a {
@@ -571,6 +573,21 @@ footer {
     .cta-box-wrapper h2 {
         font-size: 1.8rem;
     }
+
+    /* Cards adjustments */
+    .cards-grid {
+        grid-template-columns: 1fr !important;
+    }
+
+    .specific-request-card .card-content {
+        padding: 24px !important;
+        flex-direction: column;
+        text-align: center;
+    }
+
+    .specific-request-card .btn {
+        width: 100%;
+    }
 }
 
 /* Model Pages Styling */
@@ -631,9 +648,18 @@ footer {
     align-items: center;
 }
 
+/* Base Responsive Grid Class */
+.responsive-grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 40px;
+    align-items: center;
+}
+
 @media (max-width: 768px) {
     .hero-grid-container, 
-    .objective-grid-container {
+    .objective-grid-container,
+    .responsive-grid-2 {
         grid-template-columns: 1fr;
         gap: 40px;
         text-align: center;
