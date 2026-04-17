@@ -70,36 +70,65 @@ document.addEventListener('DOMContentLoaded', () => {
         observer.observe(el);
     });
 
-    /* Form Validation (if present) */
+    /* Contact Form Functionality */
     const contactForm = document.getElementById('contact-form');
     if (contactForm) {
-        contactForm.addEventListener('submit', (e) => {
+        contactForm.addEventListener('submit', function(e) {
             e.preventDefault();
             
-            // Basic validation
+            const btn = document.getElementById('submit-btn');
+            const originalBtnText = btn.textContent;
+            
+            // Collect form data
             const name = document.getElementById('name').value;
             const email = document.getElementById('email').value;
             const whatsapp = document.getElementById('whatsapp').value;
             const service = document.getElementById('service').value;
             const message = document.getElementById('message').value;
 
-            if (!name || !email || !whatsapp || !message) {
-                alert('Por favor, preencha todos os campos obrigatórios.');
-                return;
-            }
-
-            // Success feedback
-            const btn = contactForm.querySelector('button');
-            const originalText = btn.innerText;
-            btn.innerText = 'Enviando...';
+            // UI Feedback
+            btn.textContent = 'Enviando...';
             btn.disabled = true;
 
-            setTimeout(() => {
-                alert('Mensagem enviada com sucesso! Entraremos em contato em breve.');
-                contactForm.reset();
-                btn.innerText = originalText;
+            // 1. Send to Email via Formspree
+            const formData = new FormData(this);
+            const action = this.getAttribute('action');
+            
+            fetch(action, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'Accept': 'application/json'
+                }
+            }).finally(() => {
+                // We run the WA redirect regardless of Formspree success to ensure user experience,
+                // but usually, we want to know if it sent.
+            }).then(response => {
+                // 2. Format and Redirect to WhatsApp
+                const waMessage = encodeURIComponent(`*Nova Mensagem - Lanne Pro*\n\n*Nome:* ${name}\n*E-mail:* ${email}\n*WhatsApp:* ${whatsapp}\n*Serviço:* ${service}\n*Mensagem:* ${message}`);
+                const waUrl = `https://wa.me/5521969736017?text=${waMessage}`;
+                
+                window.open(waUrl, '_blank');
+                
+                // Reset form and UI
+                this.reset();
+                btn.textContent = 'Mensagem Enviada!';
+                
+                setTimeout(() => {
+                    btn.textContent = originalBtnText;
+                    btn.disabled = false;
+                }, 3000);
+            }).catch(error => {
+                console.error('Form error:', error);
+                alert('Ocorreu um erro ao processar sua mensagem. Redirecionando para o WhatsApp diretamente...');
+                
+                // Fallback to direct WA
+                const waMessage = encodeURIComponent(`*Nova Mensagem - Lanne Pro*\n\n*Nome:* ${name}\n*E-mail:* ${email}\n*WhatsApp:* ${whatsapp}\n*Serviço:* ${service}\n*Mensagem:* ${message}`);
+                window.open(`https://wa.me/5521969736017?text=${waMessage}`, '_blank');
+                
+                btn.textContent = originalBtnText;
                 btn.disabled = false;
-            }, 1500);
+            });
         });
     }
 

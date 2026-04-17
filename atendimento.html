@@ -129,57 +129,7 @@
                         </div>
                     </div>
 
-                    <script>
-                        document.getElementById('contact-form').addEventListener('submit', function(e) {
-                            e.preventDefault();
-                            
-                            const btn = document.getElementById('submit-btn');
-                            const originalBtnText = btn.textContent;
-                            btn.textContent = 'Enviando...';
-                            btn.disabled = true;
 
-                            const name = document.getElementById('name').value;
-                            const email = document.getElementById('email').value;
-                            const whatsapp = document.getElementById('whatsapp').value;
-                            const service = document.getElementById('service').value;
-                            const message = document.getElementById('message').value;
-
-                            // 1. Send to Email (using Formspree)
-                            const formData = new FormData(this);
-                            
-                            fetch(this.action, {
-                                method: 'POST',
-                                body: formData,
-                                headers: {
-                                    'Accept': 'application/json'
-                                }
-                            }).then(response => {
-                                if (response.ok) {
-                                    // 2. Redirect to WhatsApp
-                                    const waMessage = `*Nova Mensagem - Lanne Pro*%0A%0A*Nome:* ${name}%0A*E-mail:* ${email}%0A*WhatsApp:* ${whatsapp}%0A*Serviço:* ${service}%0A*Mensagem:* ${message}`;
-                                    const waUrl = `https://wa.me/5521969736017?text=${waMessage}`;
-                                    
-                                    window.open(waUrl, '_blank');
-                                    
-                                    // Reset form
-                                    this.reset();
-                                    btn.textContent = 'Mensagem Enviada!';
-                                    setTimeout(() => {
-                                        btn.textContent = originalBtnText;
-                                        btn.disabled = false;
-                                    }, 3000);
-                                } else {
-                                    alert('Ocorreu um erro ao enviar. Por favor, tente novamente.');
-                                    btn.textContent = originalBtnText;
-                                    btn.disabled = false;
-                                }
-                            }).catch(error => {
-                                alert('Ocorreu um erro de conexão.');
-                                btn.textContent = originalBtnText;
-                                btn.disabled = false;
-                            });
-                        });
-                    </script>
 
                     <!-- Info Side -->
                     <div data-aos>
